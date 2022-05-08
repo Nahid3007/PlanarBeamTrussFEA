@@ -54,6 +54,70 @@ class Element:
 
         return alpha
 
+    # calculate elements stiffness matrix in global coordinates
+    def stiffnessMatrix(self, nodes, propRod, propBeamRect, propBeamCirc):
+        if elements[eid].elem_type == 'rod':
+            ke0 = (propRod[eid].E * propRod[eid].A)/elements[eid].length(nodes)
+            s = np.sin(elements[eid].rotationAngle(nodes))
+            c = np.cos(elements[eid].rotationAngle(nodes))
+            ke = np.matrix([ [c**2,c*s,-c**2,-c*s],
+                             [c*s,s**2,-c*s,-s**2],
+                             [-c**2,-c*s,c**2,c*s],
+                             [-c*s,-s**2,c*s,s**2] ])
+            ke_g = ke0*ke
+        
+        elif elements[eid].elem_type == 'beam' and eid in propBeamRect.keys():
+            E = propBeamRect[eid].E
+            A = propBeamRect[eid].A
+            I = propBeamRect[eid].I
+            l = elements[eid].length(nodes)
+            
+            ke0 = E/l
+            ke_l = np.matrix([ [A, 0, 0, -A, 0, 0],
+                               [0, 12*(I/l**2), 6*(I/l), 0, -12*(I/l**2), 6*(I/l)],
+                               [0, 6*(I/l), 4*I, 0, -6*(I/l), 2*I],
+                               [-A, 0, 0, A, 0, 0],
+                               [0, -12*(I/l**2), 6*(I/l), 0, 12*(I/l**2), -6*(I/l)],
+                               [0, -6*(I/l), 2*I, 0, -6*(I/l), 4*I]
+                            ])
+            s = np.sin(elements[eid].rotationAngle(nodes))
+            c = np.cos(elements[eid].rotationAngle(nodes))
+            T = np.matrix([ [c,s,0,0,0,0],
+                            [-s,c,0,0,0,0],
+                            [0,0,1,0,0,0],
+                            [0,0,0,c,s,0],
+                            [0,0,0,-s,c,0],
+                            [0,0,0,0,0,1]
+                         ])
+            ke_g = T.getT()*(ke0*ke_l)*T
+            
+        elif elements[eid].elem_type == 'beam' and eid in propBeamCirc.keys():
+            E = propBeamCirc[eid].E
+            A = propBeamCirc[eid].A
+            I = propBeamCirc[eid].I
+            l = elements[eid].length(nodes)
+            
+            ke0 = E/l
+            ke_l = np.matrix([ [A, 0, 0, -A, 0, 0],
+                               [0, 12*(I/l**2), 6*(I/l), 0, -12*(I/l**2), 6*(I/l)],
+                               [0, 6*(I/l), 4*I, 0, -6*(I/l), 2*I],
+                               [-A, 0, 0, A, 0, 0],
+                               [0, -12*(I/l**2), 6*(I/l), 0, 12*(I/l**2), -6*(I/l)],
+                               [0, -6*(I/l), 2*I, 0, -6*(I/l), 4*I]
+                            ])
+            s = np.sin(elements[eid].rotationAngle(nodes))
+            c = np.cos(elements[eid].rotationAngle(nodes))
+            T = np.matrix([ [c,s,0,0,0,0],
+                            [-s,c,0,0,0,0],
+                            [0,0,1,0,0,0],
+                            [0,0,0,c,s,0],
+                            [0,0,0,-s,c,0],
+                            [0,0,0,0,0,1]
+                         ])
+            ke_g = T.getT()*(ke0*ke_l)*T 
+        
+        return ke_g
+    
 #-------------------------------------------------------------------#
 #                         P R O P E R T I E S                       #
 #-------------------------------------------------------------------#
