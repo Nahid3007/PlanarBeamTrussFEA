@@ -1,5 +1,4 @@
 import numpy as np
-#from typing import Dict, List
 
 #-------------------------------------------------------------------#
 #                                N O D E S                          #
@@ -39,18 +38,24 @@ class Element:
         n2x = nodes[self.n2].x
         n1y = nodes[self.n1].y
         n2y = nodes[self.n2].y
-        if (n1x > n2x) and (n1y < n2y):
-            alpha  = np.pi + np.arctan( (n2y-n1y)/(n2x-n1x) )
-        elif (n1x > n2x) and (n1y > n2y):
-            alpha  = -np.pi + np.arctan( (n2y-n1y)/(n2x-n1x) )
-        elif (n1x == n2x) and (n1y < n2y):
-            alpha  = np.pi/2
-        elif (n1x == n2x) and (n1y > n2y):
-            alpha  = -np.pi/2
-        elif (n1x > n2x) and (n1y == n2y):
-            alpha  = -np.pi + np.arctan( (n2y-n1y)/(n2x-n1x) )
+        if n1x < n2x and n1y == n2y:
+            alpha = 0
+        elif n1x > n2x and n1y == n2y:
+            alpha = np.pi
+        elif n1y < n2y and n1x == n2x:
+            alpha = np.pi/2
+        elif n1y > n2y and n1x == n2x:
+            alpha = (3/2)*np.pi
+        elif n1x < n2x and n1y < n2y:
+            alpha = np.arctan(abs(n2y-n1y)/abs(n2x-n1x))
+        elif n1x > n2x and n1y < n2y:
+            alpha = np.pi - np.arctan(abs(n2y-n1y)/abs(n2x-n1x))
+        elif n1x > n2x and n1y > n2y:
+            alpha = (3/2)*np.pi - np.arctan(abs(n1y-n2y)/abs(n1x-n2x))
+        elif n1x < n2x and n1y > n2y:
+            alpha = (3/2)*np.pi + np.arctan(abs(n1y-n2y)/abs(n1x-n2x))
         else:
-            alpha  = np.arctan( (n2y-n1y)/(n2x-n1x) )
+            print('Error')
 
         return alpha
 
