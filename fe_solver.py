@@ -95,10 +95,55 @@ def local_to_global_map(total_dof, elements, global_edof):
 #
 #
 
-def solve(nodes, elements, global_ndof):
-    
-    total_ndof = total_dof(global_ndof)
-    
+def solve(nodes, elements, load, spc, global_ndof, total_ndof):
     K = np.zeros([total_ndof,total_ndof])
+           
+    for eid in sorted(elements.keys()): 
+        # Get element's stiffness matrix in global coordinates        
+        ke_g = elements[eid].stiffnessMatrix(nodes, propRod, propBeamRect, propBeamCirc)
+        
+        globalDofList = []
+        localDofList = []
+        for l in lg_map[eid-1,:]-1:
+            l = int(l)
+            if l == -1:
+                continue
+            if not l in localDofList:
+                localDofList.append(l)
+            globalIndex = np.where(lg_map[eid-1,:]-1 == l)[0][0] 
+            if not globalIndex in globalDofList:
+                globalDofList.append(globalIndex)
+        
+        for l,g in zip(localDofList,globalDofList):
+            for ll,gg in zip(localDofList,globalDofList):
+                K[g,gg] = K[g,gg] + ke_g[l,ll]
+        
+    # Force vector
+    f = np.zeros([total_ndof,1])
+        
+    for nid in load.keys():
+        for i in range(len(load[nid])):
+            f[load[nid][i].global_dof(global_ndof)-1] = load[nid][i].value
+        
+     # Set the constraints
+    alldofs = np.arange(1,total_ndof+1)
+    fixed_dof = []
+    for nid in sorted(spc.keys()):
+        for i in range(len(spc[nid].global_dof(global_ndof))):
+            fixed_dof.append(spc[nid].global_dof(global_ndof)[i])
     
-    return K
+    freedofs = np.setdiff1d(alldofs,fixed_dof)
+    f_freedofs = np.zeros([freedofs.shape[0],1])
+    for r,s in zip(freedofs-1,range(freedofs.shape[0])):
+        f_freedofs[s,0] = f[r,0]
+        
+    # Rearange stiffness matrix and force vector by the searched unknowns\n"
+    K_freedofs = np.zeros([freedofs.shape[0],freedofs.shape[0]])
+    
+    for g,gg in zip(freedofs-1,range(freedofs.shape[0])):
+        for h,hh in zip(freedofs-1,range(freedofs.shape[0])):
+            K_freedofs[gg,hh] = K[g,h]
+            
+    # Solving system of equation [K] * {u} = {f}
+    u_freedofs = np.linalg.solve(K_freedofs,f_freedofs)
+
