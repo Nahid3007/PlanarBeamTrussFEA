@@ -444,8 +444,12 @@ if __name__ == '__main__':
     total_ndof = total_dof(global_ndof)
     global_edof = global_element_dofs(nodes, elements, global_ndof)
     
+    
     # C O I N C I D E N C E  T A B L E
     lg_map = local_to_global_map(total_ndof, elements, global_edof)
+    
+    print('##################################################################################\n')
+    print('Conincident table (loacl dofs to global dofs')
     print(lg_map,'\n')
     
     print('##################################################################################\n')
@@ -592,5 +596,69 @@ if __name__ == '__main__':
     # reaction forces
     f_r = np.dot(K,u)
     print('Reaction forces')
-    print(f_r)
+    print(f_r,'\n')
     
+    print('##################################################################################\n')
+    
+    # calculate strains and stresse
+    epsilon = np.zeros([len(elements),1])
+    sigma = np.zeros([len(elements),1])
+    
+    for eid in sorted(elements.keys()): 
+        if elements[eid].elem_type == 'rod':
+            
+            s = np.sin(elements[eid].rotationAngle(nodes))
+            c = np.cos(elements[eid].rotationAngle(nodes))
+            T = np.matrix([ [c,s,0,0], 
+                            [0,0,c,s] ]) 
+            
+            # elements nodal dofs
+            e_ndofs = global_edof[eid]
+            
+            # local element displacement
+            u_e = np.zeros([len(e_ndofs),1])
+            for i,j in zip(e_ndofs,range(len(e_ndofs))):
+                i = i - 1
+                u_e[j,0] = u[i,0]
+                u_local = np.dot(T,u_e) 
+            
+            B = np.matrix([ [-1/elements[eid].length(nodes),1/elements[eid].length(nodes)] ])
+            
+            # strains
+            epsilon[eid-1] = np.dot(B,u_local)
+            
+            # stresses\n",
+            sigma[eid-1] = propRod[eid].E*epsilon[eid-1,0]
+            print(sigma)
+            
+        elif elements[eid].elem_type == 'beam' and eid in propBeamRect.keys():
+            s = np.sin(elements[eid].rotationAngle(nodes))
+            c = np.cos(elements[eid].rotationAngle(nodes))
+            T = np.matrix([ [c,s,0,0,0,0],
+                            [-s,c,0,0,0,0],
+                            [0,0,1,0,0,0],
+                            [0,0,0,c,s,0],
+                            [0,0,0,-s,c,0],
+                            [0,0,0,0,0,1]
+                            ])
+            
+            # elements nodal dofs
+            e_ndofs = global_edof[eid]
+            
+            # local element displacement
+            u_e = np.zeros([len(e_ndofs),1])
+            for i,j in zip(e_ndofs,range(len(e_ndofs))):
+                i = i - 1
+                u_e[j,0] = u[i,0]
+                u_local = np.dot(T,u_e) 
+            
+            B = np.matrix([ [-1/elements[eid].length(nodes),1/elements[eid].length(nodes)] ])
+            
+
+    "        B = np.matrix([ [-1/rods[eid].length(nodes),1/rods[eid].length(nodes)] ])\n",
+    "        \n",
+    "        # strains\n",
+    "        epsilon[eid-1] = np.dot(B,u_local)\n",
+    "        \n",
+    "        # stresses\n",
+    "        sigma[eid-1] = propRod[eid].E*epsilon[eid-1,0]\n",
