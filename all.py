@@ -605,7 +605,6 @@ if __name__ == '__main__':
     sigma = np.zeros([len(elements),1])
     
     for eid in sorted(elements.keys()): 
-        print(eid)
         if elements[eid].elem_type == 'rod':
             
             s = np.sin(elements[eid].rotationAngle(nodes))
@@ -622,17 +621,15 @@ if __name__ == '__main__':
                 i = i - 1
                 u_e[j,0] = u[i,0]
                 u_local = np.dot(T,u_e) 
-            
-            print(u_local,'\n')            
+                
             B = np.matrix([ [-1/elements[eid].length(nodes),1/elements[eid].length(nodes)] ])
-            print(B,'\n')
             
-            # strains
-            #epsilon[eid-1] = np.dot(B,u_local)
+            # strain
+            epsilon[eid-1] = np.dot(B,u_local)
             
-            # stresses\n",
-            #sigma[eid-1] = propRod[eid].E*epsilon[eid-1,0]
-            #print(sigma)
+            # stress
+            sigma[eid-1] = propRod[eid].E*epsilon[eid-1,0]
+            
             
         elif elements[eid].elem_type == 'beam':
             s = np.sin(elements[eid].rotationAngle(nodes))
@@ -654,28 +651,30 @@ if __name__ == '__main__':
                 i = i - 1
                 u_e[j,0] = u[i,0]
                 u_local = np.dot(T,u_e) 
-
-            print(u_local,'\n')            
-            B = np.matrix([ [-1/elements[eid].length(nodes),1/elements[eid].length(nodes)] ])
-            print(B,'\n')
-            
-            # strains
-            #epsilon[eid-1] = np.dot(B,u_local)
-            
-            #if eid in propBeamRect.keys():
-            #    # stresses\n",
-            #    sigma[eid-1] = propBeamRect.E*epsilon[eid-1,0]
-            #    print(sigma)
-            #elif eid in propBeamRect.keys():
-            #    # stresses\n",
-            #    sigma[eid-1] = propBeamCirc.E*epsilon[eid-1,0]
-            #    print(sigma)
                 
+            x_n1 = nodes[elements[eid].n1].x
+            x_n2 = nodes[elements[eid].n2].x
+                        
+            B = np.matrix([ [   -1/elements[eid].length(nodes),
+                                1 - 3*(x_n1/elements[eid].length(nodes))**2 + 2*(x_n1/elements[eid].length(nodes))**3,
+                                x_n1 - 2*(x_n1**2/elements[eid].length(nodes)) + (x_n1**3/elements[eid].length(nodes)**2),
+                                1/elements[eid].length(nodes),
+                                -3*(x_n2/elements[eid].length(nodes))**2 + 2*(x_n2/elements[eid].length(nodes))**3,
+                                -(x_n2**2/elements[eid].length(nodes)) + (x_n2**3/elements[eid].length(nodes)**2)
+                             ] ])
 
-    "        B = np.matrix([ [-1/rods[eid].length(nodes),1/rods[eid].length(nodes)] ])\n",
-    "        \n",
-    "        # strains\n",
-    "        epsilon[eid-1] = np.dot(B,u_local)\n",
-    "        \n",
-    "        # stresses\n",
-    "        sigma[eid-1] = propRod[eid].E*epsilon[eid-1,0]\n",
+            # strain
+            epsilon[eid-1] = np.dot(B,u_local)
+            
+            if eid in propBeamRect.keys():
+                # stress
+                sigma[eid-1] = propBeamRect[eid].E*epsilon[eid-1,0]
+            elif eid in propBeamRect.keys():
+                # stress
+                sigma[eid-1] = propBeamCirc[eid].E*epsilon[eid-1,0]
+                
+    print('Strains E11')
+    print(epsilon,'\n')
+        
+    print('Stresses S11')
+    print(sigma,'\n')
