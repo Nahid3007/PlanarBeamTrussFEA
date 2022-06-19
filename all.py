@@ -605,6 +605,7 @@ if __name__ == '__main__':
     sigma = np.zeros([len(elements),1])
     
     for eid in sorted(elements.keys()): 
+        print(eid)
         if elements[eid].elem_type == 'rod':
             
             s = np.sin(elements[eid].rotationAngle(nodes))
@@ -622,16 +623,18 @@ if __name__ == '__main__':
                 u_e[j,0] = u[i,0]
                 u_local = np.dot(T,u_e) 
             
+            print(u_local,'\n')            
             B = np.matrix([ [-1/elements[eid].length(nodes),1/elements[eid].length(nodes)] ])
+            print(B,'\n')
             
             # strains
-            epsilon[eid-1] = np.dot(B,u_local)
+            #epsilon[eid-1] = np.dot(B,u_local)
             
             # stresses\n",
-            sigma[eid-1] = propRod[eid].E*epsilon[eid-1,0]
-            print(sigma)
+            #sigma[eid-1] = propRod[eid].E*epsilon[eid-1,0]
+            #print(sigma)
             
-        elif elements[eid].elem_type == 'beam' and eid in propBeamRect.keys():
+        elif elements[eid].elem_type == 'beam':
             s = np.sin(elements[eid].rotationAngle(nodes))
             c = np.cos(elements[eid].rotationAngle(nodes))
             T = np.matrix([ [c,s,0,0,0,0],
@@ -651,9 +654,23 @@ if __name__ == '__main__':
                 i = i - 1
                 u_e[j,0] = u[i,0]
                 u_local = np.dot(T,u_e) 
-            
+
+            print(u_local,'\n')            
             B = np.matrix([ [-1/elements[eid].length(nodes),1/elements[eid].length(nodes)] ])
+            print(B,'\n')
             
+            # strains
+            #epsilon[eid-1] = np.dot(B,u_local)
+            
+            #if eid in propBeamRect.keys():
+            #    # stresses\n",
+            #    sigma[eid-1] = propBeamRect.E*epsilon[eid-1,0]
+            #    print(sigma)
+            #elif eid in propBeamRect.keys():
+            #    # stresses\n",
+            #    sigma[eid-1] = propBeamCirc.E*epsilon[eid-1,0]
+            #    print(sigma)
+                
 
     "        B = np.matrix([ [-1/rods[eid].length(nodes),1/rods[eid].length(nodes)] ])\n",
     "        \n",
