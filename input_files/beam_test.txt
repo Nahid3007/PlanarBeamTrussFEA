@@ -1,0 +1,11 @@
+*Node
+1,0.,0.
+2,1000.,0.
+*element, type=beam
+1,1,2
+*property beam
+1,1,210000.,50.,2000.
+*Load
+2,-1000,1
+*Boundary
+1,1,3,0.

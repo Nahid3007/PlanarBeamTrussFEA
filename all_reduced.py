@@ -379,7 +379,7 @@ def local_to_global_map(total_dof, elements, global_edof):
 if __name__ == '__main__':
 
     # P A R S E  I N P U T  F I L E
-    nodes, elements, propRod, propBeam, load, spc = parseInputFile('./input_files/input4_reduced.txt')
+    nodes, elements, propRod, propBeam, load, spc = parseInputFile('./input_files/beam_test.txt')
     
     # G L O B A L  D O F 
     global_ndof = global_nodal_dofs(nodes, elements)
