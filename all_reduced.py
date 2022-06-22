@@ -568,7 +568,7 @@ if __name__ == '__main__':
             # strain
             epsilon[eid-1] = np.dot(B,u_local)
             
-            # stress
+                # stress
             sigma[eid-1] = propRod[eid].E*epsilon[eid-1,0]
             
             
@@ -593,15 +593,15 @@ if __name__ == '__main__':
                 u_e[j,0] = u[i,0]
                 u_local = np.dot(T,u_e) 
                 
-            x_n1 = nodes[elements[eid].n1].x
+                x_n1 = nodes[elements[eid].n1].x
             x_n2 = nodes[elements[eid].n2].x
                         
             B = np.matrix([ [  -1/elements[eid].length(nodes),
-                                1 - 3*(x_n1/elements[eid].length(nodes))**2 + 2*(x_n1/elements[eid].length(nodes))**3,
-                                x_n1 - 2*(x_n1**2/elements[eid].length(nodes)) + (x_n1**3/elements[eid].length(nodes)**2),
+                                (-6*x_n1)/(elements[eid].length(nodes))**2+(6*x_n1**2)/(elements[eid].length(nodes))**3,
+                                1-(4*x_n1)/(elements[eid].length(nodes))+(3*x_n1**2)/(elements[eid].length(nodes))**2,
                                 1/elements[eid].length(nodes),
-                                -3*(x_n2/elements[eid].length(nodes))**2 + 2*(x_n2/elements[eid].length(nodes))**3,
-                                -(x_n2**2/elements[eid].length(nodes)) + (x_n2**3/elements[eid].length(nodes)**2)
+                                (6*x_n2)/(elements[eid].length(nodes))**2-(6*x_n2**2)/(elements[eid].length(nodes))**3,
+                                -(2*x_n2)/(elements[eid].length(nodes))+(3*x_n2**2)/(elements[eid].length(nodes))**2
                              ] ])
 
             # strain
