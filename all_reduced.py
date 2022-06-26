@@ -520,6 +520,8 @@ if __name__ == '__main__':
     print('##################################################################################\n')
     
     # Solving system of equation [K] * {u} = {f}
+    print('Determinant of stiffness matrix K')
+    print(np.linalg.det(K_freedofs),'\n')
     u_freedofs = np.linalg.solve(K_freedofs,f_bb)
     print('Displacement vector for free dofs')
     print(u_freedofs,'\n')
