@@ -1,0 +1,12 @@
+*Node
+1,0.,0.
+2,750.,750.
+*element, type=rod
+1,1,2
+*property rod
+1,1,210000.,50.
+*Load
+2,1000,1
+*Boundary
+1,1,2,0.
+2,2,2,0.

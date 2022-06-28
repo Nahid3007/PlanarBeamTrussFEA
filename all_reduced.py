@@ -113,12 +113,13 @@ class PropertyRod:
         self.A = float(A)
         
 class PropertyBeam:
-    def __init__(self, eid: str, typeE: str, E: str, A: str, I: str):
+    def __init__(self, eid: str, typeE: str, E: str, A: str, I: str, h_max: str):
         self.eid = int(eid)
         self.typeE = str(typeE)
         self.E = float(E)
         self.A = float(A)
         self.I = float(I)
+        self.h_max = float(h_max)
 
 #--------------------------------------------------------------------#
 #                                 L O A D                            #
@@ -239,7 +240,7 @@ def parseInputFile(inputFile):
         elif bPbeam and not line.startswith('*'):
             lineSplit = line.split(',')
             for eid in range( int(lineSplit[0]), int(lineSplit[1])+1 ):
-                propBeam[eid] = PropertyBeam(eid, 'beam', lineSplit[2], lineSplit[3], lineSplit[4])
+                propBeam[eid] = PropertyBeam(eid, 'beam', lineSplit[2], lineSplit[3], lineSplit[4], lineSplit[5])
         # PARSE LOADS
         elif line.startswith('*load'):
             bNode = False
@@ -520,6 +521,8 @@ if __name__ == '__main__':
     print('##################################################################################\n')
     
     # Solving system of equation [K] * {u} = {f}
+    print('Determinant of stiffness matrix K')
+    print(np.linalg.det(K_freedofs),'\n')
     u_freedofs = np.linalg.solve(K_freedofs,f_bb)
     print('Displacement vector for free dofs')
     print(u_freedofs,'\n')
@@ -543,7 +546,7 @@ if __name__ == '__main__':
     
     # calculate strains and stresses
     epsilon = np.zeros([len(elements),1])
-    sigma = np.zeros([len(elements),1])
+    sigma = np.zeros([len(elements),2])
     
     for eid in sorted(elements.keys()): 
         if elements[eid].elem_type == 'rod':
@@ -592,23 +595,36 @@ if __name__ == '__main__':
                 i = i - 1
                 u_e[j,0] = u[i,0]
                 u_local = np.dot(T,u_e) 
-                
-                x_n1 = nodes[elements[eid].n1].x
-            x_n2 = nodes[elements[eid].n2].x
-                        
-            B = np.matrix([ [  -1/elements[eid].length(nodes),
-                                (-6*x_n1)/(elements[eid].length(nodes))**2+(6*x_n1**2)/(elements[eid].length(nodes))**3,
-                                1-(4*x_n1)/(elements[eid].length(nodes))+(3*x_n1**2)/(elements[eid].length(nodes))**2,
-                                1/elements[eid].length(nodes),
-                                (6*x_n2)/(elements[eid].length(nodes))**2-(6*x_n2**2)/(elements[eid].length(nodes))**3,
-                                -(2*x_n2)/(elements[eid].length(nodes))+(3*x_n2**2)/(elements[eid].length(nodes))**2
-                             ] ])
-
-            # strain
-            epsilon[eid-1] = np.dot(B,u_local)
             
-            # stress
-            sigma[eid-1] = propBeam[eid].E*epsilon[eid-1,0]
+            sxx = []    
+            for x in [nodes[elements[eid].n1].x, nodes[elements[eid].n2].x]:
+                
+                B = np.matrix([ [  -1/elements[eid].length(nodes),
+                                    (-6*x)/(elements[eid].length(nodes))**2+(6*x**2)/(elements[eid].length(nodes))**3,
+                                    1-(4*x)/(elements[eid].length(nodes))+(3*x**2)/(elements[eid].length(nodes))**2,
+                                    1/elements[eid].length(nodes),
+                                    (6*x)/(elements[eid].length(nodes))**2-(6*x**2)/(elements[eid].length(nodes))**3,
+                                    -(2*x)/(elements[eid].length(nodes))+(3*x**2)/(elements[eid].length(nodes))**2
+                                 ] ])
+    
+                # strain
+                epsilon[eid-1] = np.dot(B,u_local)
+                
+                # stress
+                B_p = np.matrix([ [ 0,
+                                    -6/(elements[eid].length(nodes))**2+(12*x)/(elements[eid].length(nodes))**3,
+                                    -4/(elements[eid].length(nodes))+(6*x)/(elements[eid].length(nodes))**2,
+                                    0,
+                                    6/(elements[eid].length(nodes))**2-(12*x)/(elements[eid].length(nodes))**3,
+                                    -2/(elements[eid].length(nodes))+(6*x)/(elements[eid].length(nodes))**2
+                                ] ])
+                                
+                sxx_top = -propBeam[eid].E*(B_p*u_e).item(0)*propBeam[eid].h_max
+                sxx_bottom = -propBeam[eid].E*(B_p*u_e).item(0)*-propBeam[eid].h_max
+                
+                sxx.append([sxx_top,sxx_bottom])
+                
+            sigma[eid-1] = max(sxx)
             
     print('Strains E11')
     print(epsilon,'\n')
