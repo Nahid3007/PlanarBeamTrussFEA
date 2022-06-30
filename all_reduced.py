@@ -380,7 +380,7 @@ def local_to_global_map(total_dof, elements, global_edof):
 if __name__ == '__main__':
 
     # P A R S E  I N P U T  F I L E
-    nodes, elements, propRod, propBeam, load, spc = parseInputFile('./input_files/beam_test.txt')
+    nodes, elements, propRod, propBeam, load, spc = parseInputFile('./input_files/beam_test_45_deg.txt')
     
     # G L O B A L  D O F 
     global_ndof = global_nodal_dofs(nodes, elements)
@@ -545,7 +545,7 @@ if __name__ == '__main__':
     print('##################################################################################\n')
     
     # calculate strains and stresses
-    epsilon = np.zeros([len(elements),1])
+    epsilon = np.zeros([len(elements),2])
     sigma = np.zeros([len(elements),2])
     
     for eid in sorted(elements.keys()): 
@@ -595,8 +595,9 @@ if __name__ == '__main__':
                 i = i - 1
                 u_e[j,0] = u[i,0]
                 u_local = np.dot(T,u_e) 
-            
-            sxx = []    
+                
+            sxx = []  
+            strain = []  
             for x in [nodes[elements[eid].n1].x, nodes[elements[eid].n2].x]:
                 
                 B = np.matrix([ [  -1/elements[eid].length(nodes),
@@ -607,8 +608,11 @@ if __name__ == '__main__':
                                     -(2*x)/(elements[eid].length(nodes))+(3*x**2)/(elements[eid].length(nodes))**2
                                  ] ])
     
-                # strain
-                epsilon[eid-1] = np.dot(B,u_local)
+                # strain                
+                strain_top = (B*u_local).item(0)*propBeam[eid].h_max
+                strain_bottom = (B*u_local).item(0)*-propBeam[eid].h_max
+
+                strain.append([strain_top,strain_bottom])
                 
                 # stress
                 B_p = np.matrix([ [ 0,
@@ -625,6 +629,7 @@ if __name__ == '__main__':
                 sxx.append([sxx_top,sxx_bottom])
                 
             sigma[eid-1] = max(sxx)
+            epsilon[eid-1] = max(strain)
             
     print('Strains E11')
     print(epsilon,'\n')
