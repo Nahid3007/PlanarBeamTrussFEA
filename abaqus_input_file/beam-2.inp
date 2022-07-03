@@ -1,0 +1,59 @@
+*Preprint, echo=YES, model=YES, history=NO, contact=NO
+**
+** PARTS
+**
+*Part, name=BEAM
+*Node
+      1,           0.,           0.
+      2,   707.106812,   707.106812
+*Element, type=B21
+1, 1, 2
+*Elset, elset=BEAM
+ 1,
+*Beam Section, elset=BEAM, material=STEEL, section=RECT
+50., 100.
+0.,0.,-1.
+*End Part
+**  
+**
+** ASSEMBLY
+**
+*Assembly, name=Assembly
+**  
+*Instance, name=BEAM, part=BEAM
+*End Instance
+**  
+*Nset, nset=FIX, instance=BEAM
+ 1,
+*Nset, nset=LOAD, instance=BEAM
+ 2,
+*End Assembly
+** 
+** MATERIALS
+** 
+*Material, name=STEEL
+*Elastic
+210000., 0.3
+*Density
+7.8e-9
+** ----------------------------------------------------------------
+*STEP, name=Matrix
+*MATRIX GENERATE, MASS, STIFFNESS
+*MATRIX OUTPUT, MASS, STIFFNESS, FORMAT=COORDINATE
+*END STEP
+**
+*Step, name=Step-1, nlgeom=NO
+*Static
+*Boundary
+FIX, 1, 1
+*Boundary
+FIX, 2, 2
+*Boundary
+FIX, 6, 6
+*Cload
+LOAD, 2, -1000.
+*NODE PRINT, SUMMARY=YES
+U,UR
+*EL PRINT, SUMMARY=YES
+S,E
+*End Step
