@@ -62,42 +62,59 @@ class Element:
     
     # calculate elements stiffness matrix in global coordinates
     def stiffnessMatrix(self, nodes, propRod, propBeam):
+        # rod element
         if elements[eid].elem_type == 'rod':
-            ke0 = (propRod[eid].E * propRod[eid].A)/elements[eid].length(nodes)
+            E = propRod[eid].E
+            A = propRod[eid].A
+            l = elements[eid].length(nodes)
+
+            ke0 = E*A/l
+            ke_l = np.matrix([ [ 1, -1],
+                               [-1,  1] ])
+
             s = np.sin(elements[eid].rotationAngle(nodes))
             c = np.cos(elements[eid].rotationAngle(nodes))
-            ke = np.matrix([ [c**2,c*s,-c**2,-c*s],
-                             [c*s,s**2,-c*s,-s**2],
-                             [-c**2,-c*s,c**2,c*s],
-                             [-c*s,-s**2,c*s,s**2] ])
-            ke_g = ke0*ke
+            T = np.matrix([ [c, s, 0, 0],
+                            [0, 0, c, s] ])
+
+            ke_g = T.transpose()*(ke0*ke_l)*T
         
+        # beam element
         elif elements[eid].elem_type == 'beam':
             E = propBeam[eid].E
             A = propBeam[eid].A
             I = propBeam[eid].I
             l = elements[eid].length(nodes)
-            
-            ke0 = E/l
-            ke_l = np.matrix([ [A, 0, 0, -A, 0, 0],
-                               [0, 12*(I/l**2), 6*(I/l), 0, -12*(I/l**2), 6*(I/l)],
-                               [0, 6*(I/l), 4*I, 0, -6*(I/l), 2*I],
-                               [-A, 0, 0, A, 0, 0],
-                               [0, -12*(I/l**2), 6*(I/l), 0, 12*(I/l**2), -6*(I/l)],
-                               [0, -6*(I/l), 2*I, 0, -6*(I/l), 4*I]
-                            ])
+            nu = propBeam[eid].nu
+            As = propBeam[eid].As
+            # Calculate parameters of transverse shear influence
+            G = E/(2*(1+nu))            
+            phi = 12*E*I/(G*As*l**2)
+
+            ke_l = np.matrix([ [ A/l,                    0,                        0, -A/l,                    0,                        0],
+                               [   0,  12*I/(l**3*(1+phi)),       6*I/(l**2*(1+phi)),    0, -12*I/(l**3*(1+phi)),       6*I/(l**2*(1+phi))],
+                               [   0,   6*I/(l**2*(1+phi)),    I*(4+phi)/(l*(1+phi)),    0,  -6*I/(l**2*(1+phi)), I*(2-phi)/(l**2*(1+phi))],
+                               [-A/l,                   0,                         0,  A/l,                    0,                        0],
+                               [   0, -12*I/(l**3*(1+phi)),       6*I/(l**2*(1+phi)),    0,  12*I/(l**3*(1+phi)),      -6*I/(l**2*(1+phi))],
+                               [   0,  -6*I/(l**2*(1+phi)), I*(2-phi)/(l**2*(1+phi)),    0,  -6*I/(l**2*(1+phi)),    I*(4+phi)/(l*(1+phi))] ])
+             
+            # ke_l = np.matrix([ [ A,           0,       0, -A,            0,        0],
+                            #    [ 0, 12*(I/l**2), 6*(I/l),  0, -12*(I/l**2),  6*(I/l)],
+                            #    [ 0,     6*(I/l),     4*I,  0,     -6*(I/l),      2*I],
+                            #    [-A,           0,       0,  A,            0,        0],
+                            #    [ 0,-12*(I/l**2), 6*(I/l),  0,  12*(I/l**2), -6*(I/l)],
+                            #    [ 0,    -6*(I/l),     2*I,  0,     -6*(I/l),      4*I] ])
             
             s = np.sin(elements[eid].rotationAngle(nodes))
             c = np.cos(elements[eid].rotationAngle(nodes))
-            T = np.matrix([ [c,s,0,0,0,0],
-                            [-s,c,0,0,0,0],
-                            [0,0,1,0,0,0],
-                            [0,0,0,c,s,0],
-                            [0,0,0,-s,c,0],
-                            [0,0,0,0,0,1]
-                         ])
+            T = np.matrix([ [c , s, 0, 0, 0, 0],
+                            [-s, c, 0, 0, 0, 0],
+                            [ 0, 0, 1, 0, 0, 0],
+                            [ 0, 0, 0, c, s, 0],
+                            [ 0, 0, 0,-s, c, 0],
+                            [ 0, 0, 0, 0, 0, 1] ])
             
-            ke_g = T.getT()*(ke0*ke_l)*T
+            ke_g = T.transpose()*(E*ke_l)*T
             
         return ke_g
 
@@ -113,13 +130,15 @@ class PropertyRod:
         self.A = float(A)
         
 class PropertyBeam:
-    def __init__(self, eid: str, typeE: str, E: str, A: str, I: str, h_max: str):
+    def __init__(self, eid: str, typeE: str, E: str, A: str, I: str, h_max: str, nu: str, As: str):
         self.eid = int(eid)
         self.typeE = str(typeE)
         self.E = float(E)
         self.A = float(A)
         self.I = float(I)
         self.h_max = float(h_max)
+        self.nu = float(nu)
+        self.As = float(As)
 
 #--------------------------------------------------------------------#
 #                                 L O A D                            #
@@ -163,7 +182,7 @@ class Boundary:
 
 def parseInputFile(inputFile):
 
-    with open(inputFile,'r') as f_in:
+    with open(inputFile) as f_in:
         lines = f_in.readlines()
 
     elements, nodes, propRod, propBeam, load, spc = {}, {}, {}, {}, {}, {}
@@ -240,7 +259,7 @@ def parseInputFile(inputFile):
         elif bPbeam and not line.startswith('*'):
             lineSplit = line.split(',')
             for eid in range( int(lineSplit[0]), int(lineSplit[1])+1 ):
-                propBeam[eid] = PropertyBeam(eid, 'beam', lineSplit[2], lineSplit[3], lineSplit[4], lineSplit[5])
+                propBeam[eid] = PropertyBeam(eid, 'beam', lineSplit[2], lineSplit[3], lineSplit[4], lineSplit[5], lineSplit[6], lineSplit[7])
         # PARSE LOADS
         elif line.startswith('*load'):
             bNode = False
