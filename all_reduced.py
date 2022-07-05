@@ -74,8 +74,8 @@ class Element:
 
             s = np.sin(elements[eid].rotationAngle(nodes))
             c = np.cos(elements[eid].rotationAngle(nodes))
-            T = np.matrix([ [c, s, 0, 0],
-                            [0, 0, c, s] ])
+            T = np.array([ [c, s, 0, 0],
+                           [0, 0, c, s] ])
 
             ke_g = T.transpose()*(ke0*ke_l)*T
         
@@ -85,25 +85,26 @@ class Element:
             A = propBeam[eid].A
             I = propBeam[eid].I
             l = elements[eid].length(nodes)
-            nu = propBeam[eid].nu
-            As = propBeam[eid].As
+            
             # Calculate parameters of transverse shear influence
-            G = E/(2*(1+nu))            
-            phi = 12*E*I/(G*As*l**2)
+            # nu = propBeam[eid].nu
+            # As = propBeam[eid].As
+            # G = E/(2*(1+nu))            
+            # phi = 12*E*I/(G*As*l**2)
 
-            ke_l = np.matrix([ [ A/l,                    0,                        0, -A/l,                    0,                        0],
-                               [   0,  12*I/(l**3*(1+phi)),       6*I/(l**2*(1+phi)),    0, -12*I/(l**3*(1+phi)),       6*I/(l**2*(1+phi))],
-                               [   0,   6*I/(l**2*(1+phi)),    I*(4+phi)/(l*(1+phi)),    0,  -6*I/(l**2*(1+phi)), I*(2-phi)/(l**2*(1+phi))],
-                               [-A/l,                   0,                         0,  A/l,                    0,                        0],
-                               [   0, -12*I/(l**3*(1+phi)),       6*I/(l**2*(1+phi)),    0,  12*I/(l**3*(1+phi)),      -6*I/(l**2*(1+phi))],
-                               [   0,  -6*I/(l**2*(1+phi)), I*(2-phi)/(l**2*(1+phi)),    0,  -6*I/(l**2*(1+phi)),    I*(4+phi)/(l*(1+phi))] ])
+            # ke_l = np.matrix([ [ A/l,                    0,                        0, -A/l,                    0,                        0],
+            #                    [   0,  12*I/(l**3*(1+phi)),       6*I/(l**2*(1+phi)),    0, -12*I/(l**3*(1+phi)),       6*I/(l**2*(1+phi))],
+            #                    [   0,   6*I/(l**2*(1+phi)),    I*(4+phi)/(l*(1+phi)),    0,  -6*I/(l**2*(1+phi)), I*(2-phi)/(l**2*(1+phi))],
+            #                    [-A/l,                   0,                         0,  A/l,                    0,                        0],
+            #                    [   0, -12*I/(l**3*(1+phi)),       6*I/(l**2*(1+phi)),    0,  12*I/(l**3*(1+phi)),      -6*I/(l**2*(1+phi))],
+            #                    [   0,  -6*I/(l**2*(1+phi)), I*(2-phi)/(l**2*(1+phi)),    0,  -6*I/(l**2*(1+phi)),    I*(4+phi)/(l*(1+phi))] ])
              
-            # ke_l = np.matrix([ [ A,           0,       0, -A,            0,        0],
-                            #    [ 0, 12*(I/l**2), 6*(I/l),  0, -12*(I/l**2),  6*(I/l)],
-                            #    [ 0,     6*(I/l),     4*I,  0,     -6*(I/l),      2*I],
-                            #    [-A,           0,       0,  A,            0,        0],
-                            #    [ 0,-12*(I/l**2), 6*(I/l),  0,  12*(I/l**2), -6*(I/l)],
-                            #    [ 0,    -6*(I/l),     2*I,  0,     -6*(I/l),      4*I] ])
+            ke_l = np.matrix([ [ A,           0,       0, -A,            0,        0],
+                               [ 0, 12*(I/l**2), 6*(I/l),  0, -12*(I/l**2),  6*(I/l)],
+                               [ 0,     6*(I/l),     4*I,  0,     -6*(I/l),      2*I],
+                               [-A,           0,       0,  A,            0,        0],
+                               [ 0,-12*(I/l**2), 6*(I/l),  0,  12*(I/l**2), -6*(I/l)],
+                               [ 0,    -6*(I/l),     2*I,  0,     -6*(I/l),      4*I] ])
             
             s = np.sin(elements[eid].rotationAngle(nodes))
             c = np.cos(elements[eid].rotationAngle(nodes))
@@ -114,7 +115,7 @@ class Element:
                             [ 0, 0, 0,-s, c, 0],
                             [ 0, 0, 0, 0, 0, 1] ])
             
-            ke_g = T.transpose()*(E*ke_l)*T
+            ke_g = T.transpose()*(E/l)*ke_l*T
             
         return ke_g
 
@@ -130,15 +131,15 @@ class PropertyRod:
         self.A = float(A)
         
 class PropertyBeam:
-    def __init__(self, eid: str, typeE: str, E: str, A: str, I: str, h_max: str, nu: str, As: str):
+    def __init__(self, eid: str, typeE: str, E: str, A: str, I: str, h_max: str):
         self.eid = int(eid)
         self.typeE = str(typeE)
         self.E = float(E)
         self.A = float(A)
         self.I = float(I)
         self.h_max = float(h_max)
-        self.nu = float(nu)
-        self.As = float(As)
+        # self.nu = float(nu)
+        # self.As = float(As)
 
 #--------------------------------------------------------------------#
 #                                 L O A D                            #
@@ -259,7 +260,7 @@ def parseInputFile(inputFile):
         elif bPbeam and not line.startswith('*'):
             lineSplit = line.split(',')
             for eid in range( int(lineSplit[0]), int(lineSplit[1])+1 ):
-                propBeam[eid] = PropertyBeam(eid, 'beam', lineSplit[2], lineSplit[3], lineSplit[4], lineSplit[5], lineSplit[6], lineSplit[7])
+                propBeam[eid] = PropertyBeam(eid, 'beam', lineSplit[2], lineSplit[3], lineSplit[4], lineSplit[5])
         # PARSE LOADS
         elif line.startswith('*load'):
             bNode = False
@@ -567,13 +568,15 @@ if __name__ == '__main__':
     epsilon = np.zeros([len(elements),2])
     sigma = np.zeros([len(elements),2])
     
-    for eid in sorted(elements.keys()): 
+    for eid in sorted(elements.keys()):
+        # ROD elements 
         if elements[eid].elem_type == 'rod':
             
+            l = elements[eid].length(nodes)
             s = np.sin(elements[eid].rotationAngle(nodes))
             c = np.cos(elements[eid].rotationAngle(nodes))
-            T = np.matrix([ [c,s,0,0], 
-                            [0,0,c,s] ]) 
+            T = np.matrix([ [c, s, 0, 0], 
+                            [0, 0, c, s] ]) 
             
             # elements nodal dofs
             e_ndofs = global_edof[eid]
@@ -585,25 +588,28 @@ if __name__ == '__main__':
                 u_e[j,0] = u[i,0]
                 u_local = np.dot(T,u_e) 
                 
-            B = np.matrix([ [-1/elements[eid].length(nodes),1/elements[eid].length(nodes)] ])
+            # Displacement
+            B = np.matrix([ [-1/l, 1/l] ])
             
             # strain
             epsilon[eid-1] = np.dot(B,u_local)
             
-                # stress
+            # stress
             sigma[eid-1] = propRod[eid].E*epsilon[eid-1,0]
             
-            
+        # BEAM elements    
         elif elements[eid].elem_type == 'beam':
+            
+            E = propBeam[eid].E
+            l = elements[eid].length(nodes)
             s = np.sin(elements[eid].rotationAngle(nodes))
             c = np.cos(elements[eid].rotationAngle(nodes))
-            T = np.matrix([ [c,s,0,0,0,0],
-                            [-s,c,0,0,0,0],
-                            [0,0,1,0,0,0],
-                            [0,0,0,c,s,0],
-                            [0,0,0,-s,c,0],
-                            [0,0,0,0,0,1]
-                            ])
+            T = np.array([  [ c, s, 0, 0, 0, 0],
+                            [-s, c, 0, 0, 0, 0],
+                            [ 0, 0, 1, 0, 0, 0],
+                            [ 0, 0, 0, c, s, 0],
+                            [ 0, 0, 0,-s, c, 0],
+                            [ 0, 0, 0, 0, 0, 1] ])
             
             # elements nodal dofs
             e_ndofs = global_edof[eid]
@@ -615,40 +621,37 @@ if __name__ == '__main__':
                 u_e[j,0] = u[i,0]
                 u_local = np.dot(T,u_e) 
                 
-            sxx = []  
-            strain = []  
-            for x in [nodes[elements[eid].n1].x, nodes[elements[eid].n2].x]:
+            u_axial = np.array([ u_local[0], u_local[3] ])
+            u_bending = np.array([ u_local[1], u_local[2], u_local[4], u_local[5] ])
+            
+            xn1 = nodes[elements[eid].n1].x * s
+            xn2 = nodes[elements[eid].n2].x * s
                 
-                B = np.matrix([ [  -1/elements[eid].length(nodes),
-                                    (-6*x)/(elements[eid].length(nodes))**2+(6*x**2)/(elements[eid].length(nodes))**3,
-                                    1-(4*x)/(elements[eid].length(nodes))+(3*x**2)/(elements[eid].length(nodes))**2,
-                                    1/elements[eid].length(nodes),
-                                    (6*x)/(elements[eid].length(nodes))**2-(6*x**2)/(elements[eid].length(nodes))**3,
-                                    -(2*x)/(elements[eid].length(nodes))+(3*x**2)/(elements[eid].length(nodes))**2
-                                 ] ])
+            B_axial = np.array([ [ -1/l, 1/l ] ])
     
-                # strain                
-                strain_top = (B*u_local).item(0)*propBeam[eid].h_max
-                strain_bottom = (B*u_local).item(0)*-propBeam[eid].h_max
-
-                strain.append([strain_top,strain_bottom])
-                
-                # stress
-                B_p = np.matrix([ [ 0,
-                                    -6/(elements[eid].length(nodes))**2+(12*x)/(elements[eid].length(nodes))**3,
-                                    -4/(elements[eid].length(nodes))+(6*x)/(elements[eid].length(nodes))**2,
-                                    0,
-                                    6/(elements[eid].length(nodes))**2-(12*x)/(elements[eid].length(nodes))**3,
-                                    -2/(elements[eid].length(nodes))+(6*x)/(elements[eid].length(nodes))**2
-                                ] ])
-                                
-                sxx_top = -propBeam[eid].E*(B_p*u_e).item(0)*propBeam[eid].h_max
-                sxx_bottom = -propBeam[eid].E*(B_p*u_e).item(0)*-propBeam[eid].h_max
-                
-                sxx.append([sxx_top,sxx_bottom])
-                
-            sigma[eid-1] = max(sxx)
-            epsilon[eid-1] = max(strain)
+            B_bending = np.matrix([ [ - 6/l**2 + (12*xn1)/l**3 ,
+                                      - 4/l    + (6*xn1)/l**2  ,
+                                        6/l**2 - (12*xn2)/l**3 ,
+                                      - 2/l    + (6*xn2)/l**2   ] ])
+                           
+            # strain
+            epsilon_axial = np.dot(B_axial,u_axial)
+            
+            h_max = propBeam[eid].h_max           
+            epsilon_top = - h_max*np.dot(B_bending,u_bending)
+            epsilon_bottom = - (-h_max)*np.dot(B_bending,u_bending)
+            
+            epsilon[eid-1][0] = epsilon_top+epsilon_axial
+            epsilon[eid-1][1] = epsilon_bottom+epsilon_axial
+            
+            # stress
+            sigma_axial = np.dot(B_axial,u_axial)*E
+            
+            sigma_top = - h_max*np.dot(B_bending,u_bending)*E
+            sigma_bottom = - (-h_max)*np.dot(B_bending,u_bending)*E
+        
+            sigma[eid-1][0] = sigma_top+sigma_axial
+            sigma[eid-1][1] = sigma_bottom+sigma_axial
             
     print('Strains E11')
     print(epsilon,'\n')
