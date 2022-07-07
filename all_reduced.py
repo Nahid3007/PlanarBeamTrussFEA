@@ -400,7 +400,7 @@ def local_to_global_map(total_dof, elements, global_edof):
 if __name__ == '__main__':
 
     # P A R S E  I N P U T  F I L E
-    nodes, elements, propRod, propBeam, load, spc = parseInputFile('./input_files/beam_test_45_deg.txt')
+    nodes, elements, propRod, propBeam, load, spc = parseInputFile('./input_files/beam_test_90_deg.txt')
     
     # G L O B A L  D O F 
     global_ndof = global_nodal_dofs(nodes, elements)
@@ -622,23 +622,23 @@ if __name__ == '__main__':
                 u_local = np.dot(T,u_e) 
                 
             u_axial = np.array([ u_local[0], u_local[3] ])
-            u_bending = np.array([ u_local[1], u_local[2], u_local[4], u_local[5] ])
+            u_bending = np.array([ u_local[1], u_local[2] , u_local[4], u_local[5] ])
             
-            xn1 = nodes[elements[eid].n1].x * s
-            xn2 = nodes[elements[eid].n2].x * s
+            x = l/2 # integration point of a 2 node linear beam element
                 
             B_axial = np.array([ [ -1/l, 1/l ] ])
     
-            B_bending = np.matrix([ [ - 6/l**2 + (12*xn1)/l**3 ,
-                                      - 4/l    + (6*xn1)/l**2  ,
-                                        6/l**2 - (12*xn2)/l**3 ,
-                                      - 2/l    + (6*xn2)/l**2   ] ])
+            B_bending = np.matrix([ [ - 6/l**2 + (12*x)/l**3 ,
+                                      - 4/l    + (6*x)/l**2  ,
+                                        6/l**2 - (12*x)/l**3 ,
+                                      - 2/l    + (6*x)/l**2   ] ])
+            
+            h_max = propBeam[eid].h_max
                            
             # strain
             epsilon_axial = np.dot(B_axial,u_axial)
-            
-            h_max = propBeam[eid].h_max           
-            epsilon_top = - h_max*np.dot(B_bending,u_bending)
+                       
+            epsilon_top = - (h_max)*np.dot(B_bending,u_bending)
             epsilon_bottom = - (-h_max)*np.dot(B_bending,u_bending)
             
             epsilon[eid-1][0] = epsilon_top+epsilon_axial
@@ -647,7 +647,7 @@ if __name__ == '__main__':
             # stress
             sigma_axial = np.dot(B_axial,u_axial)*E
             
-            sigma_top = - h_max*np.dot(B_bending,u_bending)*E
+            sigma_top = - (h_max)*np.dot(B_bending,u_bending)*E
             sigma_bottom = - (-h_max)*np.dot(B_bending,u_bending)*E
         
             sigma[eid-1][0] = sigma_top+sigma_axial
