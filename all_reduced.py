@@ -576,11 +576,9 @@ if __name__ == '__main__':
             B = np.matrix([ [-1/l, 1/l] ])
             
             # strain
-            epsilon[eid-1][0] = np.dot(B,u_local)
-            epsilon[eid-1][1] = 'nan'
+            epsilon[eid-1] = np.dot(B,u_local)
             # stress
-            sigma[eid-1][0] = propRod[eid].E*epsilon[eid-1,0]
-            sigma[eid-1][1] = 'nan'
+            sigma[eid-1] = propRod[eid].E*epsilon[eid-1,0]
             
         # BEAM elements    
         elif elements[eid].elem_type == 'beam':

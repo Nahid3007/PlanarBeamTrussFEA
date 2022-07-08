@@ -1,0 +1,699 @@
+1
+
+   Abaqus Student Edition 2021                                  Date 08-Jul-2022   Time 23:22:12
+   
+
+
+
+     PROCESSING PART, INSTANCE, AND ASSEMBLY INFORMATION
+   *******************************************************
+
+
+     END PROCESSING PART, INSTANCE, AND ASSEMBLY INFORMATION
+   ***********************************************************
+
+1
+
+   Abaqus Student Edition 2021                                  Date 08-Jul-2022   Time 23:22:13
+   
+
+                                                                                     
+
+                                             A B A Q U S   I N P U T   E C H O
+
+
+                    *preprint, echo=YES, history=NO, model=YES, contact=NO  
+                    ** ----------------------------------------------------------------     
+                    ** PART INSTANCE: PART  
+                    **      
+     LINE     5     *Node   
+                    1, 0, 0, 0      
+                    2, 0, 750, 0    
+                    3, -500, 750, 0 
+                    4, 433.0127, 1000, 0    
+     LINE    10     *Element, type=B21      
+                    1, 1, 2 
+                    *Element, type=T2D2     
+                    2, 2, 3 
+                    3, 2, 4 
+     LINE    15     *Elset, elset=ASSEMBLY_PART_BEAM
+                    1       
+                    *Elset, elset=ASSEMBLY_PART_TRUSS1      
+                    2       
+                    *Elset, elset=ASSEMBLY_PART_TRUSS2      
+     LINE    20     3       
+                    *beamsection, elset=ASSEMBLY_PART_BEAM, material=MAT_BEAM, section=CIRCULAR     
+                    17.95   
+                    0., 0., -1.     
+                    *solidsection, material=MAT_TRUSS, elset=ASSEMBLY_PART_TRUSS1   
+     LINE    25     450.,   
+                    *solidsection, material=MAT_TRUSS, elset=ASSEMBLY_PART_TRUSS2   
+                    600.,   
+                    **      
+                    ** Assembly Nsets       
+     LINE    30     **      
+                    *Nset, nset=ASSEMBLY_DISP       
+                    4       
+                    *Nset, nset=ASSEMBLY_FIXBEAM    
+                    1       
+     LINE    35     *Nset, nset=ASSEMBLY_FIXTRUSS   
+                    3       
+                    *material, name=MAT_BEAM
+                    *elastic
+                    200000., 0.3    
+     LINE    40     *density
+                    7.8E-9  
+                    *material, name=MAT_TRUSS       
+                    *elastic
+                    200000., 0.3    
+     LINE    45     *density
+                    7.8E-9  
+                    *Step, name=Matrix      
+                    *matrixgenerate, mass, stiffness
+                    *matrixoutput, mass, format=COORDINATE, stiffness       
+     LINE    50     *endstep
+                    *Step, name=Step-1, nlgeom=NO   
+                    *static 
+                    *boundary       
+                    ASSEMBLY_FIXBEAM, 1, 2, 0.      
+     LINE    55     ASSEMBLY_FIXTRUSS, 1, 2, 0.     
+                    ASSEMBLY_DISP, 1, 1, 0. 
+                    ASSEMBLY_DISP, 2, 2, 10.
+                    *nodeprint, summary=YES 
+                    U, UR   
+     LINE    60     *elprint, summary=YES   
+                    S, E    
+                    *endstep
+                    --------------------------------------------------------------------------------
+                        5   10   15   20   25   30   35   40   45   50   55   60   65   70   75   80
+                    --------------------------------------------------------------------------------
+
+
+
+     OPTIONS BEING PROCESSED
+   ***************************
+
+
+  *Node
+  *Element, type=B21
+  *Element, type=T2D2
+  *Elset, elset=ASSEMBLY_PART_BEAM
+  *Elset, elset=ASSEMBLY_PART_TRUSS1
+  *Elset, elset=ASSEMBLY_PART_TRUSS2
+  *Nset, nset=ASSEMBLY_DISP
+  *Nset, nset=ASSEMBLY_FIXBEAM
+  *Nset, nset=ASSEMBLY_FIXTRUSS
+  *material, name=MAT_BEAM
+  *elastic
+  *density
+  *material, name=MAT_TRUSS
+  *elastic
+  *density
+  *solidsection, material=MAT_TRUSS, elset=ASSEMBLY_PART_TRUSS1
+  *solidsection, material=MAT_TRUSS, elset=ASSEMBLY_PART_TRUSS2
+  *solidsection, material=MAT_TRUSS, elset=ASSEMBLY_PART_TRUSS1
+
+ ***WARNING: FOR TWO-DIMENSIONAL MODELS, IF A NON-UNITY THICKNESS IS SPECIFIED 
+             FOR TWO-DIMENSIONAL SOLID ELEMENTS AND THESE ELEMENTS ARE INVOLVED 
+             IN AN INTERACTION SUCH AS CONTACT, THE SAME THICKNESS SHOULD BE 
+             SPECIFIED FOR THE OUT-OF-PLANE THICKNESS OF THE CORRESPONDING 
+             SURFACE UNDER *SURFACE INTERACTION.
+  *solidsection, material=MAT_TRUSS, elset=ASSEMBLY_PART_TRUSS2
+  *beamsection, elset=ASSEMBLY_PART_BEAM, material=MAT_BEAM, section=CIRCULAR
+  *boundary
+  *Step, name=Matrix
+  *Step, name=Step-1, nlgeom=NO
+  *Step, name=Matrix
+  *Step, name=Step-1, nlgeom=NO
+  *Step, name=Matrix
+  *matrixgenerate, mass, stiffness
+  *matrixoutput, mass, format=COORDINATE, stiffness
+  *endstep
+  *Step, name=Step-1, nlgeom=NO
+  *static
+  *boundary
+  *nodeprint, summary=YES
+  *elprint, summary=YES
+  *endstep
+  *Step, name=Matrix
+  *endstep
+  *Step, name=Step-1, nlgeom=NO
+  *static
+  *boundary
+  *endstep
+1
+
+   Abaqus Student Edition 2021                                  Date 08-Jul-2022   Time 23:22:13
+   
+
+                                                                                     
+
+
+                              E L E M E N T   D E F I N I T I O N S
+
+       NUMBER   TYPE    PROPERTY    NODES FORMING ELEMENT
+                        REFERENCE
+
+          1   B21           3          1         2
+          2   T2D2          1          2         3
+          3   T2D2          2          2         4
+
+
+
+
+
+                                S O L I D   S E C T I O N (S)
+
+
+
+
+  PROPERTY NUMBER         1
+
+     MATERIAL NAME                     MAT_TRUSS                                                                       
+     ATTRIBUTES                          450.00       0.0000       0.0000    
+
+     HOURGLASS CONTROL STIFFNESS     384.62    
+
+     (USED WITH LOWER ORDER REDUCED INTEGRATED SOLID ELEMENTS LIKE CPS4R,CPE4RH,C3D8R)
+
+
+
+
+  PROPERTY NUMBER         2
+
+     MATERIAL NAME                     MAT_TRUSS                                                                       
+     ATTRIBUTES                          600.00       0.0000       0.0000    
+
+     HOURGLASS CONTROL STIFFNESS     384.62    
+
+     (USED WITH LOWER ORDER REDUCED INTEGRATED SOLID ELEMENTS LIKE CPS4R,CPE4RH,C3D8R)
+
+
+
+
+
+                                 B E A M   S E C T I O N
+
+
+
+
+  SECTION NUMBER     3 IS USED WITH BEAMS IN A PLANE
+
+     SECTION TYPE:   CIRCULAR        
+     MATERIAL NAME:  MAT_BEAM                                                                        
+     RADIUS                                   =    17.950    
+
+     ORIENTATION OF THE SECTION 1-AXIS        =   (  0.0000    ,  0.0000    , -1.0000    )
+     SECTION POISSON RATIO                    =      0.0000     (USED WITH LINEAR AND QUADRATIC BEAM ELEMENTS ONLY)
+
+     TOTAL NUMBER OF INTEGRATION POINTS IN THE SECTION                 =    5
+     NUMBER OF INTEGRATION POINTS IN THE 2-DIRECTION OF THE SECTION =  5
+
+     AREA                                     =    1012.229    
+     MOMENT OF INERTIA I(11)                  =    81535.68    
+     CENTROID COORDINATES (1,2)               =  (  0.000000    ,-5.6156678E-16)
+
+     TRANSVERSE SHEAR STIFFNESSES
+     (ONLY USED IF THE SECTION IS ASSOCIATED WITH SHEAR DEFORMABLE BEAMS):
+       K*G(23)*A =    6.92988E+07
+       K*G(13)*A =    6.92988E+07
+
+
+
+
+
+                         P H Y S I C A L   C O N S T A N T S
+
+
+
+
+
+
+                         M A T E R I A L   D E S C R I P T I O N
+
+
+
+
+  MATERIAL NAME: MAT_BEAM                                                                        
+
+
+     ELASTIC         YOUNG'S    POISSON'S
+                     MODULUS      RATIO
+
+                    2.00000E+05 0.30000    
+
+
+     MASS DENSITY
+
+
+            DENSITY     
+
+            7.8000E-09
+
+
+
+  MATERIAL NAME: MAT_TRUSS                                                                       
+
+
+     ELASTIC         YOUNG'S    POISSON'S
+                     MODULUS      RATIO
+
+                    2.00000E+05 0.30000    
+
+
+     MASS DENSITY
+
+
+            DENSITY     
+
+            7.8000E-09
+
+
+
+
+
+                                 E L E M E N T   S E T S
+
+
+  SET    ASSEMBLY_PART_BEAM                                                              
+  MEMBERS                    1
+
+  SET    ASSEMBLY_PART_TRUSS1                                                            
+  MEMBERS                    2
+
+  SET    ASSEMBLY_PART_TRUSS2                                                            
+  MEMBERS                    3
+
+
+
+                                    N O D E   S E T S
+
+
+  SET    ASSEMBLY_DISP                                                                   
+  MEMBERS                    4
+
+  SET    ASSEMBLY_FIXBEAM                                                                
+  MEMBERS                    1
+
+  SET    ASSEMBLY_FIXTRUSS                                                               
+  MEMBERS                    3
+
+
+
+
+
+                                 N O D E   D E F I N I T I O N S
+
+       NODE                COORDINATES                             NORMAL                    SINGLE POINT CONSTRAINTS 
+      NUMBER                                                                                    TYPE   PLUS   DOF
+
+          1     0.0000       0.0000       0.0000      -1.0000       0.0000       0.0000                                                             
+          2     0.0000       750.00       0.0000      -1.0000       0.0000       0.0000                                                             
+          3    -500.00       750.00       0.0000       0.0000       0.0000       0.0000                                                             
+          4     433.01       1000.0       0.0000       0.0000       0.0000       0.0000                                                             
+
+
+
+
+               S T E P   D E P E N D E N T   G L O B A L   D A M P I N G 
+                (M E C H A N I C A L   D E G R E E S  O F  F R E E D O M)
+
+          RAYLEIGH DAMPING     STRUCTURAL DAMPING
+          ALPHA        BETA   
+
+           0.00         0.00         0.00    
+
+
+
+
+               S T E P   D E P E N D E N T   D A M P I N G   C O N T R O L S   
+
+
+          VISCOUS DAMPING = COMBINED
+
+          STRUCTURAL DAMPING = COMBINED
+
+
+                              E L E M E N T,   N O D E,   A N D   S U R F A C E   M A P S
+
+
+**NOTE: This section may not include complete information about
+        members of sets and surfaces. Use *PREPRINT, MODEL=YES 
+        in order to get the set and surface members printed    
+        under the following sections:                          
+            - E L E M E N T   S E T S                          
+            - N O D E   S E T S                                
+            - S U R F A C E   D E F I N I T I O N S .          
+
+
+Assembly name: ASSEMBLY
+Number of instances: 1
+
+ASSEMBLY LEVEL
+  node sets:
+    DISP:
+      instance name: PART
+      number of nodes: 1
+      nodes: 
+        4
+
+    FIXBEAM:
+      instance name: PART
+      number of nodes: 1
+      nodes: 
+        1
+
+    FIXTRUSS:
+      instance name: PART
+      number of nodes: 1
+      nodes: 
+        3
+
+  element sets:
+  Surfaces:
+
+INSTANCE LEVEL
+  node sets:
+
+  element sets:
+    Instance name: PART
+      element set name: BEAM
+        number of elements: 1
+        elements: 
+          1
+      element set name: TRUSS1
+        number of elements: 1
+        elements: 
+          2
+      element set name: TRUSS2
+        number of elements: 1
+        elements: 
+          3
+
+  Surfaces:
+
+GLOBAL TO LOCAL NODE AND ELEMENT MAPS
+  Global     Local      
+  node       node       
+  number     number     
+                        Instance name                                   
+   1          1         PART                                            
+   2          2         PART                                            
+   3          3         PART                                            
+   4          4         PART                                            
+
+  Global     Local      
+  element    element    
+  number     number     
+                        Instance name                                   
+   1          1         PART                                            
+   2          2         PART                                            
+   3          3         PART                                            
+
+LOCAL TO GLOBAL NODE AND ELEMENT MAPS
+                                                  Local      Global     
+                                                  node       node       
+                                                  number     number
+  Instance name
+  PART                                             1          1         
+  PART                                             2          2         
+  PART                                             3          3         
+  PART                                             4          4         
+
+                                                  Local      Global     
+                                                  element    element    
+                                                  number     number
+  Instance name
+  PART                                             1          1         
+  PART                                             2          2         
+  PART                                             3          3         
+
+
+
+
+                            P R O B L E M   S I Z E
+
+
+          NUMBER OF ELEMENTS IS                                     3
+          NUMBER OF NODES IS                                        6
+          NUMBER OF NODES DEFINED BY THE USER                       4
+          NUMBER OF INTERNAL NODES GENERATED BY THE PROGRAM         2
+          TOTAL NUMBER OF VARIABLES IN THE MODEL                   10
+          (DEGREES OF FREEDOM PLUS MAX NO. OF ANY LAGRANGE MULTIPLIER
+           VARIABLES. INCLUDE *PRINT,SOLVE=YES TO GET THE ACTUAL NUMBER.)
+
+
+
+                              END OF USER INPUT PROCESSING
+
+
+
+     JOB TIME SUMMARY
+       USER TIME (SEC)      =  0.20000    
+       SYSTEM TIME (SEC)    =   0.0000    
+       TOTAL CPU TIME (SEC) =  0.20000    
+       WALLCLOCK TIME (SEC) =          0
+1
+
+   Abaqus Student Edition 2021                                  Date 08-Jul-2022   Time 23:22:20
+   
+
+                                                                                               STEP    1  INCREMENT    1
+                                                                                          TIME COMPLETED IN THIS STEP   0.00    
+ 
+
+
+                        S T E P       1     M A T R I X   G E N E R A T E
+ 
+  THE FOLLOWING GLOBAL MATRICES WILL BE GENERATED AND WRITTEN TO input4_X1.sim
+
+    STIFFNESS
+    MASS
+ 
+  THE MASS MATRIX PROPERTIES: CONSISTENT MASS MATRIX
+ 
+  IF MULTI-POINT CONSTRAINTS ARE SPECIFIED IN THE MODEL, THEY WILL BE APPLIED
+ 
+  THE FOLLOWING GLOBAL MATRICES WILL BE WRITTEN TO THE FOLLOWING TEXT FILES
+
+    STIFFNESS          TO input4_STIF1.mtx
+    MASS               TO input4_MASS1.mtx
+ 
+  MATRIX OUTPUT FORMAT - COORDINATE
+
+
+
+                    TOTAL MASS OF MODEL
+
+                      1.0016540E-02
+
+
+                    LOCATION OF THE CENTER OF MASS OF THE MODEL
+
+                       6.776278           557.5106    
+
+
+                    MOMENT OF INERTIA ABOUT THE ORIGIN
+                           I(ZZ)
+
+                       4919.973    
+
+
+                    PRODUCT OF INERTIA ABOUT THE ORIGIN
+                           I(XY)
+
+                      -177.5624    
+
+
+                    MOMENT OF INERTIA ABOUT THE CENTER OF MASS
+                           I(ZZ)
+
+                       1806.191    
+
+
+                    PRODUCT OF INERTIA ABOUT THE CENTER OF MASS
+                           I(XY)
+
+                      -139.7214    
+  
+                   M E M O R Y   E S T I M A T E
+  
+ PROCESS      FLOATING PT       MINIMUM MEMORY        MEMORY TO
+              OPERATIONS           REQUIRED          MINIMIZE I/O
+             PER ITERATION           (MB)               (MB)
+  
+     1          0.00E+00               18                 18
+  
+ NOTE:
+      (1) SINCE ABAQUS DOES NOT PRE-ALLOCATE MEMORY AND ONLY ALLOCATES MEMORY AS NEEDED DURING THE ANALYSIS,
+          THE MEMORY REQUIREMENT PRINTED HERE CAN ONLY BE VIEWED AS A GENERAL GUIDELINE BASED ON THE BEST
+          KNOWLEDGE AVAILABLE AT THE BEGINNING OF A STEP BEFORE THE SOLUTION PROCESS HAS BEGUN.
+      (2) THE ESTIMATE IS NORMALLY UPDATED AT THE BEGINNING OF EVERY STEP. IT IS THE MAXIMUM VALUE OF THE
+          ESTIMATE FROM THE CURRENT STEP TO THE LAST STEP OF THE ANALYSIS, WITH UNSYMMETRIC SOLUTION TAKEN
+          INTO ACCOUNT IF APPLICABLE. 
+      (3) SINCE THE ESTIMATE IS BASED ON THE ACTIVE DEGREES OF FREEDOM IN THE FIRST ITERATION OF THE 
+          CURRENT STEP, THE MEMORY ESTIMATE MIGHT BE SIGNIFICANTLY DIFFERENT THAN ACTUAL USAGE FOR 
+          PROBLEMS WITH SUBSTANTIAL CHANGES IN ACTIVE DEGREES OF FREEDOM BETWEEN STEPS (OR EVEN WITHIN
+          THE SAME STEP). EXAMPLES ARE: PROBLEMS WITH SIGNIFICANT CONTACT CHANGES, PROBLEMS WITH MODEL
+          CHANGE, PROBLEMS WITH BOTH STATIC STEP AND STEADY STATE DYNAMIC PROCEDURES WHERE ACOUSTIC 
+          ELEMENTS WILL ONLY BE ACTIVATED IN THE STEADY STATE DYNAMIC STEPS.
+      (4) FOR MULTI-PROCESS EXECUTION, THE ESTIMATED VALUE OF FLOATING POINT OPERATIONS FOR EACH PROCESS
+          IS BASED ON AN INITIAL SCHEDULING OF OPERATIONS AND MIGHT NOT REFLECT THE ACTUAL FLOATING 
+          POINT OPERATIONS COMPLETED ON EACH PROCESS. OPERATIONS ARE DYNAMICALLY BALANCED DURING EXECUTION, 
+          SO THE ACTUAL BALANCE OF OPERATIONS BETWEEN PROCESSES IS EXPECTED TO BE BETTER THAN THE ESTIMATE
+          PRINTED HERE.
+      (5) THE UPPER LIMIT OF MEMORY THAT CAN BE ALLOCATED BY ABAQUS WILL IN GENERAL DEPEND ON THE VALUE OF
+          THE "MEMORY" PARAMETER AND THE AMOUNT OF PHYSICAL MEMORY AVAILABLE ON THE MACHINE. PLEASE SEE
+          THE "ABAQUS ANALYSIS USER'S MANUAL" FOR MORE DETAILS. THE ACTUAL USAGE OF MEMORY AND OF DISK
+          SPACE FOR SCRATCH DATA WILL DEPEND ON THIS UPPER LIMIT AS WELL AS THE MEMORY REQUIRED TO MINIMIZE
+          I/O. IF THE MEMORY UPPER LIMIT IS GREATER THAN THE MEMORY REQUIRED TO MINIMIZE I/O, THEN THE ACTUAL
+          MEMORY USAGE WILL BE CLOSE TO THE ESTIMATED "MEMORY TO MINIMIZE I/O" VALUE, AND THE SCRATCH DISK
+          USAGE WILL BE CLOSE-TO-ZERO; OTHERWISE, THE ACTUAL MEMORY USED WILL BE CLOSE TO THE PREVIOUSLY
+          MENTIONED MEMORY LIMIT, AND THE SCRATCH DISK USAGE WILL BE ROUGHLY PROPORTIONAL TO THE DIFFERENCE
+          BETWEEN THE ESTIMATED "MEMORY TO MINIMIZE I/O" AND THE MEMORY UPPER LIMIT. HOWEVER ACCURATE
+          ESTIMATE OF THE SCRATCH DISK SPACE IS NOT POSSIBLE.
+      (6) USING "*RESTART, WRITE" CAN GENERATE A LARGE AMOUNT OF DATA WRITTEN IN THE WORK DIRECTORY.
+  
+1
+
+   Abaqus Student Edition 2021                                  Date 08-Jul-2022   Time 23:22:22
+   
+
+                                                                                               STEP    2  INCREMENT    1
+                                                                                          TIME COMPLETED IN THIS STEP   0.00    
+
+
+                        S T E P       2     S T A T I C   A N A L Y S I S
+
+
+                                                                                          
+
+     AUTOMATIC TIME CONTROL WITH -
+          A SUGGESTED INITIAL TIME INCREMENT OF                 1.00    
+          AND A TOTAL TIME PERIOD OF                            1.00    
+          THE MINIMUM TIME INCREMENT ALLOWED IS                1.000E-05
+          THE MAXIMUM TIME INCREMENT ALLOWED IS                 1.00    
+
+     LINEAR EQUATION SOLVER TYPE         DIRECT SPARSE
+  
+                   M E M O R Y   E S T I M A T E
+  
+ PROCESS      FLOATING PT       MINIMUM MEMORY        MEMORY TO
+              OPERATIONS           REQUIRED          MINIMIZE I/O
+             PER ITERATION           (MB)               (MB)
+  
+     1          1.73E+02               17                 24
+  
+ NOTE:
+      (1) SINCE ABAQUS DOES NOT PRE-ALLOCATE MEMORY AND ONLY ALLOCATES MEMORY AS NEEDED DURING THE ANALYSIS,
+          THE MEMORY REQUIREMENT PRINTED HERE CAN ONLY BE VIEWED AS A GENERAL GUIDELINE BASED ON THE BEST
+          KNOWLEDGE AVAILABLE AT THE BEGINNING OF A STEP BEFORE THE SOLUTION PROCESS HAS BEGUN.
+      (2) THE ESTIMATE IS NORMALLY UPDATED AT THE BEGINNING OF EVERY STEP. IT IS THE MAXIMUM VALUE OF THE
+          ESTIMATE FROM THE CURRENT STEP TO THE LAST STEP OF THE ANALYSIS, WITH UNSYMMETRIC SOLUTION TAKEN
+          INTO ACCOUNT IF APPLICABLE. 
+      (3) SINCE THE ESTIMATE IS BASED ON THE ACTIVE DEGREES OF FREEDOM IN THE FIRST ITERATION OF THE 
+          CURRENT STEP, THE MEMORY ESTIMATE MIGHT BE SIGNIFICANTLY DIFFERENT THAN ACTUAL USAGE FOR 
+          PROBLEMS WITH SUBSTANTIAL CHANGES IN ACTIVE DEGREES OF FREEDOM BETWEEN STEPS (OR EVEN WITHIN
+          THE SAME STEP). EXAMPLES ARE: PROBLEMS WITH SIGNIFICANT CONTACT CHANGES, PROBLEMS WITH MODEL
+          CHANGE, PROBLEMS WITH BOTH STATIC STEP AND STEADY STATE DYNAMIC PROCEDURES WHERE ACOUSTIC 
+          ELEMENTS WILL ONLY BE ACTIVATED IN THE STEADY STATE DYNAMIC STEPS.
+      (4) FOR MULTI-PROCESS EXECUTION, THE ESTIMATED VALUE OF FLOATING POINT OPERATIONS FOR EACH PROCESS
+          IS BASED ON AN INITIAL SCHEDULING OF OPERATIONS AND MIGHT NOT REFLECT THE ACTUAL FLOATING 
+          POINT OPERATIONS COMPLETED ON EACH PROCESS. OPERATIONS ARE DYNAMICALLY BALANCED DURING EXECUTION, 
+          SO THE ACTUAL BALANCE OF OPERATIONS BETWEEN PROCESSES IS EXPECTED TO BE BETTER THAN THE ESTIMATE
+          PRINTED HERE.
+      (5) THE UPPER LIMIT OF MEMORY THAT CAN BE ALLOCATED BY ABAQUS WILL IN GENERAL DEPEND ON THE VALUE OF
+          THE "MEMORY" PARAMETER AND THE AMOUNT OF PHYSICAL MEMORY AVAILABLE ON THE MACHINE. PLEASE SEE
+          THE "ABAQUS ANALYSIS USER'S MANUAL" FOR MORE DETAILS. THE ACTUAL USAGE OF MEMORY AND OF DISK
+          SPACE FOR SCRATCH DATA WILL DEPEND ON THIS UPPER LIMIT AS WELL AS THE MEMORY REQUIRED TO MINIMIZE
+          I/O. IF THE MEMORY UPPER LIMIT IS GREATER THAN THE MEMORY REQUIRED TO MINIMIZE I/O, THEN THE ACTUAL
+          MEMORY USAGE WILL BE CLOSE TO THE ESTIMATED "MEMORY TO MINIMIZE I/O" VALUE, AND THE SCRATCH DISK
+          USAGE WILL BE CLOSE-TO-ZERO; OTHERWISE, THE ACTUAL MEMORY USED WILL BE CLOSE TO THE PREVIOUSLY
+          MENTIONED MEMORY LIMIT, AND THE SCRATCH DISK USAGE WILL BE ROUGHLY PROPORTIONAL TO THE DIFFERENCE
+          BETWEEN THE ESTIMATED "MEMORY TO MINIMIZE I/O" AND THE MEMORY UPPER LIMIT. HOWEVER ACCURATE
+          ESTIMATE OF THE SCRATCH DISK SPACE IS NOT POSSIBLE.
+      (6) USING "*RESTART, WRITE" CAN GENERATE A LARGE AMOUNT OF DATA WRITTEN IN THE WORK DIRECTORY.
+
+
+                                INCREMENT     1 SUMMARY
+
+
+ TIME INCREMENT COMPLETED   1.00    ,  FRACTION OF STEP COMPLETED   1.00    
+ STEP TIME COMPLETED        1.00    ,  TOTAL TIME COMPLETED         1.00    
+
+
+
+                                                  E L E M E N T   O U T P U T
+
+
+
+
+
+   THE FOLLOWING TABLE IS PRINTED FOR ALL ELEMENTS WITH TYPE B21 AT THE INTEGRATION POINTS
+
+    ELEMENT  PT SEC FOOT-   S11         E11         
+                 PT NOTE 
+
+           1   1  1       266.7      1.3337E-03
+           1   1  5       266.7      1.3337E-03
+
+ MAXIMUM                 266.7      1.3337E-03                                                                                    
+ ELEMENT                        1           1                                                                                     
+
+ MINIMUM                 266.7      1.3337E-03                                                                                    
+ ELEMENT                        1           1                                                                                     
+
+
+
+   THE FOLLOWING TABLE IS PRINTED FOR ALL ELEMENTS WITH TYPE T2D2 AT THE INTEGRATION POINTS
+
+    ELEMENT  PT FOOT-       S11         E11         
+                NOTE 
+
+           2   1          1039.      5.1960E-03
+           3   1          900.0      4.4999E-03
+
+ MAXIMUM                 1039.      5.1960E-03                                                                                    
+ ELEMENT                     2           2                                                                                     
+
+ MINIMUM                 900.0      4.4999E-03                                                                                    
+ ELEMENT                     3           3                                                                                     
+  
+  
+  
+  
+                                       N O D E   O U T P U T
+  
+  
+  
+  
+   THE FOLLOWING TABLE IS PRINTED FOR ALL NODES
+  
+       NODE FOOT-  U1             U2             UR3          
+            NOTE
+  
+         1      0.0000000E+00  0.0000000E+00 -3.4640089E-03 
+         2      2.5980067E+00  1.0002409E+00 -3.4640089E-03 
+         4      0.0000000E+00  1.0000000E+01 
+
+ MAXIMUM          2.598       10.00     -3.4640E-03
+ AT NODE                 2           4           1
+
+ MINIMUM          0.000       0.000     -3.4640E-03
+ AT NODE                 1           1           2
+
+
+          THE ANALYSIS HAS BEEN COMPLETED
+
+
+
+                              ANALYSIS COMPLETE
+                              WITH      1 WARNING MESSAGES ON THE DAT FILE
+
+
+
+     JOB TIME SUMMARY
+       USER TIME (SEC)      =  0.60000    
+       SYSTEM TIME (SEC)    =  0.10000    
+       TOTAL CPU TIME (SEC) =  0.70000    
+       WALLCLOCK TIME (SEC) =          2
