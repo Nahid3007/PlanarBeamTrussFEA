@@ -1,6 +1,6 @@
 1
 
-   Abaqus Student Edition 2021                                  Date 08-Jul-2022   Time 23:22:12
+   Abaqus Student Edition 2021                                  Date 11-Jul-2022   Time 20:25:51
    
 
 
@@ -14,7 +14,7 @@
 
 1
 
-   Abaqus Student Edition 2021                                  Date 08-Jul-2022   Time 23:22:13
+   Abaqus Student Edition 2021                                  Date 11-Jul-2022   Time 20:25:51
    
 
                                                                                      
@@ -80,7 +80,7 @@
                     ASSEMBLY_DISP, 1, 1, 0. 
                     ASSEMBLY_DISP, 2, 2, 10.
                     *nodeprint, summary=YES 
-                    U, UR   
+                    U, UR, RF, RM   
      LINE    60     *elprint, summary=YES   
                     S, E    
                     *endstep
@@ -143,7 +143,7 @@
   *endstep
 1
 
-   Abaqus Student Edition 2021                                  Date 08-Jul-2022   Time 23:22:13
+   Abaqus Student Edition 2021                                  Date 11-Jul-2022   Time 20:25:51
    
 
                                                                                      
@@ -450,12 +450,12 @@ LOCAL TO GLOBAL NODE AND ELEMENT MAPS
 
      JOB TIME SUMMARY
        USER TIME (SEC)      =  0.20000    
-       SYSTEM TIME (SEC)    =   0.0000    
-       TOTAL CPU TIME (SEC) =  0.20000    
-       WALLCLOCK TIME (SEC) =          0
+       SYSTEM TIME (SEC)    =  0.10000    
+       TOTAL CPU TIME (SEC) =  0.30000    
+       WALLCLOCK TIME (SEC) =          1
 1
 
-   Abaqus Student Edition 2021                                  Date 08-Jul-2022   Time 23:22:20
+   Abaqus Student Edition 2021                                  Date 11-Jul-2022   Time 20:26:00
    
 
                                                                                                STEP    1  INCREMENT    1
@@ -556,7 +556,7 @@ LOCAL TO GLOBAL NODE AND ELEMENT MAPS
   
 1
 
-   Abaqus Student Edition 2021                                  Date 08-Jul-2022   Time 23:22:22
+   Abaqus Student Edition 2021                                  Date 11-Jul-2022   Time 20:26:02
    
 
                                                                                                STEP    2  INCREMENT    1
@@ -669,18 +669,19 @@ LOCAL TO GLOBAL NODE AND ELEMENT MAPS
   
    THE FOLLOWING TABLE IS PRINTED FOR ALL NODES
   
-       NODE FOOT-  U1             U2             UR3          
+       NODE FOOT-  U1             U2             UR3            RF1            RF2            RM3          
             NOTE
   
-         1      0.0000000E+00  0.0000000E+00 -3.4640089E-03 
-         2      2.5980067E+00  1.0002409E+00 -3.4640089E-03 
-         4      0.0000000E+00  1.0000000E+01 
+         1      0.0000000E+00  0.0000000E+00 -3.4640089E-03  2.0516740E-13 -2.6999277E+05  0.0000000E+00 
+         2      2.5980067E+00  1.0002409E+00 -3.4640089E-03  0.0000000E+00  0.0000000E+00  0.0000000E+00 
+         3      0.0000000E+00  0.0000000E+00                -4.6764120E+05  0.0000000E+00 
+         4      0.0000000E+00  1.0000000E+01                 4.6764120E+05  2.6999277E+05 
 
- MAXIMUM          2.598       10.00     -3.4640E-03
- AT NODE                 2           4           1
+ MAXIMUM          2.598       10.00     -3.4640E-03  4.6764E+05  2.6999E+05   0.000    
+ AT NODE                 2           4           1           4           4           1
 
- MINIMUM          0.000       0.000     -3.4640E-03
- AT NODE                 1           1           2
+ MINIMUM          0.000       0.000     -3.4640E-03 -4.6764E+05 -2.6999E+05   0.000    
+ AT NODE                 1           1           2           3           1           1
 
 
           THE ANALYSIS HAS BEEN COMPLETED
@@ -694,6 +695,6 @@ LOCAL TO GLOBAL NODE AND ELEMENT MAPS
 
      JOB TIME SUMMARY
        USER TIME (SEC)      =  0.60000    
-       SYSTEM TIME (SEC)    =  0.10000    
-       TOTAL CPU TIME (SEC) =  0.70000    
-       WALLCLOCK TIME (SEC) =          2
+       SYSTEM TIME (SEC)    =   0.0000    
+       TOTAL CPU TIME (SEC) =  0.60000    
+       WALLCLOCK TIME (SEC) =          3
