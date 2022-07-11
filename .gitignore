@@ -1,2 +1,2 @@
-/code_structured/__pycache__/*
+./code_structured/__pycache__/*.pyc
 .DS_Store
