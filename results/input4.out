@@ -1,6 +1,6 @@
 #----------------------------------------------------------------------------------------#
 #
-# Nodal and elemental results for: input4_reduced.txt
+# Nodal and elemental results for: input4.txt
 # Number of nodes: 4
 # Number of elements: 3
 # Total number of degrees of freedom: 10
@@ -14,8 +14,8 @@
 4, 0.0000e+00, 1.0000e+01, 
 
 # Reaction forces ( [nid], [RFx], [RFy], [RMz] )
-1, -1.6371e-11, -2.7027e+05, -2.9104e-11, 
-2, -1.4552e-10, 1.4552e-10, -2.9104e-11, 
+1, -1.6485e-11, -2.7027e+05, 2.9104e-11, 
+2, -8.7311e-11, 1.1642e-10, 1.4552e-11, 
 3, -4.6709e+05, 5.7201e-11, 
 4, 4.6812e+05, 2.7027e+05, 
 

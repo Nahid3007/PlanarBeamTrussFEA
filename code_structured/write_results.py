@@ -4,7 +4,7 @@
 
 def write_results(u, f_r, epsilon, sigma, global_ndof, total_ndof, nodes, elements, filename):
     
-    output_name = filename.replace('.txt','.res')
+    output_name = filename.replace('.txt','.out')
     
     with open('../results/'+output_name,'w') as f:
         f.write(f'#----------------------------------------------------------------------------------------#\n')

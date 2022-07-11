@@ -8,8 +8,8 @@
 2,2,3
 *property rod
 1,1,200000.,15.
-*property beam, type=rect
-2,2,200000.,2.28217732294,21.9089023002
+*property beam
+2,2,200000.,50.,2000.,5.
 *Load
 2,1000000,3
 *Boundary
