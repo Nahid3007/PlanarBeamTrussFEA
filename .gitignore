@@ -1,2 +1,4 @@
 ./code_structured/__pycache__/*.pyc
+./abaqus_dat_files
+./_outdated
 .DS_Store
