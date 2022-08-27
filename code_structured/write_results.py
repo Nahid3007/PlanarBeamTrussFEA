@@ -20,7 +20,7 @@ def write_results(u, f_r, epsilon, sigma, global_ndof, total_ndof, nodes, elemen
     # nodal results
     # displacemnt
     with open('../results/'+output_name,'a') as f:
-        f.write(f'# Displacement ( [nid], [Ux], [Uy], [URz] )\n')
+        f.write(f'# Displacement ( nid, Ux, Uy, URz )\n')
         for nid in sorted(nodes.keys()):
             dofs = global_ndof[nid]
             f.write(f'{nid}, ')
@@ -31,7 +31,7 @@ def write_results(u, f_r, epsilon, sigma, global_ndof, total_ndof, nodes, elemen
             
     # reaction forces
     with open('../results/'+output_name,'a') as f:
-        f.write(f'# Reaction forces ( [nid], [RFx], [RFy], [RMz] )\n')
+        f.write(f'# Reaction forces ( nid, RFx, RFy, RMz )\n')
         for nid in sorted(nodes.keys()):
             dofs = global_ndof[nid]
             f.write(f'{nid}, ')
@@ -43,14 +43,13 @@ def write_results(u, f_r, epsilon, sigma, global_ndof, total_ndof, nodes, elemen
     # elemental results
     # strain
     with open('../results/'+output_name,'a') as f:
-        f.write(f'# Element strains ( [eid], [strain at Pt. 1], [strain at Pt. 2] )\n')
+        f.write(f'# Element strains ( eid, strain at point 1, strain at point 2 )\n')
         for eid in sorted(elements.keys()):
             f.write(f'{eid}, {"%.4e" % epsilon[eid-1].item(0)}, {"%.4e" % epsilon[eid-1].item(1)}\n')
         f.write(f'\n')
     
     # strain
     with open('../results/'+output_name,'a') as f:
-        f.write(f'# Element stresses ( [eid], [strain at Pt. 1], [strain at Pt. 2] )\n')
+        f.write(f'# Element stresses ( eid, strain at point 1, strain at point 2 )\n')
         for eid in sorted(elements.keys()):
             f.write(f'{eid}, {"%.4e" % sigma[eid-1].item(0)}, {"%.4e" % sigma[eid-1].item(1)}\n')
-            
