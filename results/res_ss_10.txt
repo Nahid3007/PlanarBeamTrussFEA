@@ -1,0 +1,32 @@
+#----------------------------------------------------------------------------------------#
+#
+# NODAL AND ELEMENTAL RESULTS FOR: ss_10.txt
+# 
+# SUMMARY FE PROBLEM SIZE OVERVIEW
+# NUMBER OF NODES: 4
+# NUMBER OF ELEMENTS: 3
+# TOTAL NUMBER OF DEGREES OF FREEDOM: 10
+#
+#----------------------------------------------------------------------------------------#
+
+# Displacement ( nid, Ux, Uy, URz )
+1, 0.0000e+00, 0.0000e+00, -3.4599e-03, 
+2, 2.5949e+00, 1.0010e+00, -3.4599e-03, 
+3, 0.0000e+00, 0.0000e+00, 
+4, 0.0000e+00, 1.0000e+01, 
+
+# Reaction forces ( nid, RFx, RFy, RMz )
+1, -1.6485e-11, -2.7027e+05, 2.9104e-11, 
+2, -8.7311e-11, 1.1642e-10, 1.4552e-11, 
+3, -4.6709e+05, 5.7201e-11, 
+4, 4.6812e+05, 2.7027e+05, 
+
+# Element strains ( eid, strain at point 1, strain at point 2 )
+1, 1.3347e-03, 1.3347e-03
+2, 5.1898e-03, 5.1898e-03
+3, 4.5045e-03, 4.5045e-03
+
+# Element stresses ( eid, strain at point 1, strain at point 2 )
+1, 2.6693e+02, 2.6693e+02
+2, 1.0380e+03, 1.0380e+03
+3, 9.0089e+02, 9.0089e+02
