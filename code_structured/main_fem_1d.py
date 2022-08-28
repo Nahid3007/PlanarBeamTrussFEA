@@ -14,9 +14,9 @@ if __name__ == '__main__':
     
     # P A R S E  I N P U T  F I L E
     nodes, elements, propRod, propBeam, load, spc = parseInputFile('../input_files/'+sys.argv[1])
-    
     filename = sys.argv[1]
-    
+    print(f'Parsing input file {filename} ...\n')
+
     # G L O B A L  D O F S
     global_ndof = global_nodal_dofs(nodes, elements)
     total_ndof = total_dof(global_ndof)
@@ -29,9 +29,13 @@ if __name__ == '__main__':
     f, u, fixed_dof, freedofs, K_freedofs, f_bb = loads_and_bc(load, spc, total_ndof, global_ndof, K)
     
     u_freedofs = solve_structure_eq(f_bb, K_freedofs)
-    
+    print('Solving system of equation ...\n')
+
     # P O S T P R O C E S S  S T U C T U R A L  R E S U L T S
     u, f_r, epsilon, sigma = postprocess_structural_results(f, u, u_freedofs, freedofs, global_edof, K, nodes, elements, propRod, propBeam)    
 
     # W R I T E  O U T  R E S U L T S
     write_results(u, f_r, epsilon, sigma, global_ndof, total_ndof, nodes, elements, filename)
+    print('Writing results ...\n')
+
+    print('Done.')
