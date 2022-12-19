@@ -8,13 +8,20 @@ import matplotlib.patches as patches
 
 if __name__ == '__main__':
 
-    filename = 'msc_marc_rod_example.txt'
+    filename = sys.argv[1]
+    
+    print(f'[INF] Visualize FE input model')
     
     # P A R S E  I N P U T  F I L E
     
+    print(f'[INF] Parsing input file {filename}')
+    
     nodes, elements, propRod, propBeam, load, spc = parseInputFile('./input_files/'+filename)
     
+    # Plot node, elements
+    
     el_length = []
+    
     for eid in sorted(elements.keys()):
         # print(eid, elements[eid].elem_type, elements[eid].n1, elements[eid].n2)
         
@@ -46,70 +53,112 @@ if __name__ == '__main__':
         plt.annotate(str(int(eid)),(dx,dy), ha='center',fontsize = 12, color='#380282')
         
         plt.axis('equal')
-        #plt.axis('off')
+        plt.axis('off')
+    
+    # Plot coordinate system
+    
+    centroid = np.array([0.,0.])
+    
+    for nid in sorted(nodes.keys()):
+        centroid += nodes[nid].coordinates
+        
+    centroid = centroid/len(nodes)
+    
+    axis_scale = max(el_length)*.05
+    scale_head_length = axis_scale*0.15
+    scale_head_width  = axis_scale*0.15
+    
+    # plt.annotate(str('COG'), (centroid[0],centroid[1]), textcoords='offset points', xytext=(10,5), ha='right', fontsize = 8, color='orange')
+    plt.arrow(centroid[0],centroid[1], axis_scale, 0, fc="orange", ec="orange", head_width=scale_head_length, head_length=scale_head_width )
+    plt.annotate('x', (centroid[0],centroid[1]), textcoords='offset points', xytext=(450*axis_scale,0*axis_scale), ha='right', fontsize = 10, color='orange')
+    
+    plt.arrow(centroid[0],centroid[1], 0, axis_scale, fc="orange", ec="orange", head_width=scale_head_length, head_length=scale_head_width )
+    plt.annotate('Y', (centroid[0],centroid[1]), textcoords='offset points', xytext=(0*axis_scale,300*axis_scale), ha='right', fontsize = 10, color='orange')
     
     # Plot applied forces
     
-    # kwPos = dict(arrowstyle="-|>, head_length=6, head_width=3", color="g")
-    # kwNeg = dict(arrowstyle="<|-, head_length=6, head_width=3", color="g")
-
-    # for nid in sorted(load.keys()):
-        # for i in range(len(load[nid])):
-            
-            # scale = max(el_length)*0.002
-            
-            # # print(nid, load[nid][i].local_dof, load[nid][i].value, scale )
-            
-            # # Plot Moments
-            # if load[nid][i].local_dof == 3 and load[nid][i].value > 0:
-                # a3 = patches.FancyArrowPatch((nodes[int(nid)].x, nodes[int(nid)].y+scale), (nodes[int(nid)].x, nodes[int(nid)].y-scale), connectionstyle="arc3,rad=.4", **kwPos)
-                # plt.gca().add_patch(a3)
-                # #plt.annotate(str(load[nid][i].value), (nodes[int(nid)].x,nodes[int(nid)].y), textcoords='offset points', xytext=(-15,5), ha='right', fontsize = 12, color='g')
-            # elif load[nid][i].local_dof == 3 and load[nid][i].value < 0:
-                # a3 = patches.FancyArrowPatch((nodes[int(nid)].x, nodes[int(nid)].y+scale), (nodes[int(nid)].x, nodes[int(nid)].y-scale), connectionstyle="arc3,rad=.4", **kwNeg)
-                # plt.gca().add_patch(a3)
-                # #plt.annotate(str(load[nid][i].value), (nodes[int(nid)].x,nodes[int(nid)].y), textcoords='offset points', xytext=(-15,5), ha='right', fontsize = 12, color='g')
-            # # Plot Forces
-            # elif load[nid][i].local_dof == 1 and load[nid][i].value < 0:    
-                # plt.arrow( nodes[int(nid)].x, nodes[int(nid)].y, -scale, 0, fc="g", ec="g", head_width=50, head_length=50 )
-                # #plt.annotate(str(load[nid][i].value), (nodes[int(nid)].x,nodes[int(nid)].y), textcoords='offset points', xytext=(-5,5), ha='right', fontsize = 12, color='g')
-            # elif load[nid][i].local_dof == 1 and load[nid][i].value > 0:    
-                # plt.arrow( nodes[int(nid)].x, nodes[int(nid)].y, scale, 0, fc="g", ec="g", head_width=50, head_length=50 )
-                # #plt.annotate(str(load[nid][i].value), (nodes[int(nid)].x,nodes[int(nid)].y), textcoords='offset points', xytext=(40,5), ha='right', fontsize = 12, color='g')
-            # elif load[nid][i].local_dof == 2 and load[nid][i].value < 0:    
-                # plt.arrow( nodes[int(nid)].x, nodes[int(nid)].y, 0, -scale, fc="g", ec="g", head_width=50, head_length=50 )
-                # #plt.annotate(str(load[nid][i].value), (nodes[int(nid)].x,nodes[int(nid)].y), textcoords='offset points', xytext=(-5,-20), ha='right', fontsize = 12, color='g')
-            # elif load[nid][i].local_dof == 2 and load[nid][i].value > 0:    
-                # plt.arrow( nodes[int(nid)].x, nodes[int(nid)].y, 0, scale, fc="g", ec="g", head_width=50, head_length=50 )
-                # #plt.annotate(str(load[nid][i].value), (nodes[int(nid)].x,nodes[int(nid)].y), textcoords='offset points', xytext=(-5,20), ha='right', fontsize = 12, color='g')
+    kwPos = dict(arrowstyle="-|>, head_length=6, head_width=3", color="g")
+    kwNeg = dict(arrowstyle="<|-, head_length=6, head_width=3", color="g")
     
-    # Plot constraints    
-    # for nid in sorted(spc.keys()):
-        # for i in range(len(spc[nid])):
+    f_vector_scale = 0.18
+    
+    scale = max(el_length)*f_vector_scale
+    scale_head_length = scale*0.12
+    scale_head_width  = scale*0.12
+
+    for nid in sorted(load.keys()):
+        for i in range(len(load[nid])):
             
-            # # print(nid, spc[nid][i].fixed_local_dof, spc[nid][i].value)
+            print(f'[INF] Load: {nid.strip()}, {load[nid][i].local_dof}, {load[nid][i].value}')
+           
+            # Plot Forces
             
-            # if len(spc[nid][i].fixed_local_dof) == 3:
-                # # print(nodes[int(nid)].x, nodes[int(nid)].y)
-                # plt.plot( [nodes[int(nid)].x],[nodes[int(nid)].y], marker='s', markersize= 10, fillstyle='full', color='b')
-            # elif len(spc[nid][i].fixed_local_dof) == 2:
-                # # print(nodes[int(nid)].x, nodes[int(nid)].y)
-                # plt.plot( [nodes[int(nid)].x],[nodes[int(nid)].y], marker=6, markersize= 12, fillstyle='full', color='b')
-                # plt.plot( [nodes[int(nid)].x],[nodes[int(nid)].y], marker=5, markersize= 12, fillstyle='full', color='b')
-            # else:
-                # # print(nodes[int(nid)].x, nodes[int(nid)].y, spc[nid][i].fixed_local_dof, spc[nid][i].value)
-                # if spc[nid][i].fixed_local_dof[0] == 1 and spc[nid][i].value == 0:
-                    # plt.plot( [nodes[int(nid)].x],[nodes[int(nid)].y], marker=5, markersize= 12, fillstyle='full', color='b')
-                # elif spc[nid][i].fixed_local_dof[0] == 1 and spc[nid][i].value != 0:
-                    # plt.plot( [nodes[int(nid)].x],[nodes[int(nid)].y], marker=5, markersize= 12, fillstyle='full', color='g')
-                # elif spc[nid][i].fixed_local_dof[0] == 2 and spc[nid][i].value == 0:
-                    # plt.plot( [nodes[int(nid)].x],[nodes[int(nid)].y], marker=6, markersize= 12, fillstyle='full', color='b')
-                # elif spc[nid][i].fixed_local_dof[0] == 2 and spc[nid][i].value != 0:
-                    # plt.plot( [nodes[int(nid)].x],[nodes[int(nid)].y], marker=6, markersize= 12, fillstyle='full', color='g')
-                    # #plt.annotate(str(spc[nid][i].value), (nodes[int(nid)].x,nodes[int(nid)].y), textcoords='offset points', xytext=(0,-20), ha='left', fontsize = 12, color='g')
+            if load[nid][i].local_dof == 1 and load[nid][i].value < 0:    
+                plt.arrow( nodes[int(nid)].x, nodes[int(nid)].y, -scale, 0, fc="g", ec="g", head_width=scale_head_length, head_length=scale_head_width )
+                plt.annotate( 'F = '+str(load[nid][i].value), (nodes[int(nid)].x,nodes[int(nid)].y), textcoords='offset points', xytext=(-250*scale,30*scale), ha='right', fontsize = 10, color='g')
+            
+            elif load[nid][i].local_dof == 1 and load[nid][i].value > 0:    
+                plt.arrow( nodes[int(nid)].x, nodes[int(nid)].y, scale, 0, fc="g", ec="g", head_width=scale_head_length, head_length=scale_head_width )
+                plt.annotate('F = '+str(load[nid][i].value), (nodes[int(nid)].x,nodes[int(nid)].y), textcoords='offset points', xytext=(400*scale,30*scale), ha='right', fontsize = 10, color='g')
+            
+            elif load[nid][i].local_dof == 2 and load[nid][i].value < 0:    
+                plt.arrow( nodes[int(nid)].x, nodes[int(nid)].y, 0, -scale, fc="g", ec="g", head_width=scale_head_length, head_length=scale_head_width )
+                plt.annotate('F = '+str(load[nid][i].value), (nodes[int(nid)].x,nodes[int(nid)].y), textcoords='offset points', xytext=(-30*scale,-200*scale), ha='right', fontsize = 10, color='g')
+            
+            elif load[nid][i].local_dof == 2 and load[nid][i].value > 0:    
+                plt.arrow( nodes[int(nid)].x, nodes[int(nid)].y, 0, scale, fc="g", ec="g", head_width=scale_head_length, head_length=scale_head_width )
+                plt.annotate('F = '+str(load[nid][i].value), (nodes[int(nid)].x,nodes[int(nid)].y), textcoords='offset points', xytext=(-30*scale,200*scale), ha='right', fontsize = 10, color='g')
+    
+            # Plot Moments
+            
+            elif load[nid][i].local_dof == 3 and load[nid][i].value > 0:
+                a3 = patches.FancyArrowPatch((nodes[int(nid)].x, nodes[int(nid)].y+scale), (nodes[int(nid)].x, nodes[int(nid)].y-scale), connectionstyle="arc3,rad=.4", **kwPos)
+                plt.gca().add_patch(a3)
+                #plt.annotate(str(load[nid][i].value), (nodes[int(nid)].x,nodes[int(nid)].y), textcoords='offset points', xytext=(-15,5), ha='right', fontsize = 12, color='g')
+            
+            elif load[nid][i].local_dof == 3 and load[nid][i].value < 0:
+                a3 = patches.FancyArrowPatch((nodes[int(nid)].x, nodes[int(nid)].y+scale), (nodes[int(nid)].x, nodes[int(nid)].y-scale), connectionstyle="arc3,rad=.4", **kwNeg)
+                plt.gca().add_patch(a3)
+                #plt.annotate(str(load[nid][i].value), (nodes[int(nid)].x,nodes[int(nid)].y), textcoords='offset points', xytext=(-15,5), ha='right', fontsize = 12, color='g')
+    
+    # Plot constraints
+    
+    for nid in sorted(spc.keys()):
+        for i in range(len(spc[nid])):
+            
+            print(f'[INF]  SPC: {nid}, {spc[nid][i].fixed_local_dof}, {spc[nid][i].value}')
+            
+            if len(spc[nid][i].fixed_local_dof) == 3:
+                plt.plot( [nodes[int(nid)].x],[nodes[int(nid)].y], marker='s', markersize= 10, fillstyle='full', color='b')
+
+            elif len(spc[nid][i].fixed_local_dof) == 2:
+                plt.plot( [nodes[int(nid)].x],[nodes[int(nid)].y], marker=6, markersize= 12, fillstyle='full', color='b')
+                plt.plot( [nodes[int(nid)].x],[nodes[int(nid)].y], marker=5, markersize= 12, fillstyle='full', color='b')
+
+            else:
+
+                if spc[nid][i].fixed_local_dof[0] == 1 and spc[nid][i].value == 0:
+                    plt.plot( [nodes[int(nid)].x],[nodes[int(nid)].y], marker=5, markersize= 12, fillstyle='full', color='b')
+
+                elif spc[nid][i].fixed_local_dof[0] == 1 and spc[nid][i].value != 0:
+                    plt.plot( [nodes[int(nid)].x],[nodes[int(nid)].y], marker=5, markersize= 12, fillstyle='full', color='g')
+                    plt.annotate('u = '+str(spc[nid][i].value), (nodes[int(nid)].x,nodes[int(nid)].y), textcoords='offset points', xytext=(-50*scale,35*scale), ha='right', fontsize = 10, color='g')
+
+                elif spc[nid][i].fixed_local_dof[0] == 2 and spc[nid][i].value == 0:
+                    plt.plot( [nodes[int(nid)].x],[nodes[int(nid)].y], marker=6, markersize= 12, fillstyle='full', color='b')
+
+                elif spc[nid][i].fixed_local_dof[0] == 2 and spc[nid][i].value != 0:
+                    plt.plot( [nodes[int(nid)].x],[nodes[int(nid)].y], marker=6, markersize= 12, fillstyle='full', color='g')
+                    plt.annotate('u = '+str(spc[nid][i].value), (nodes[int(nid)].x,nodes[int(nid)].y), textcoords='offset points', xytext=(240*scale,-100*scale), ha='right', fontsize = 10, color='g')
+    
+    # Output
     
     fig_fem_model_input = filename.replace('.txt','')+'_FE_Model.png'
+    
     output_path = './input_files/'+fig_fem_model_input
+    
     plt.savefig(output_path, dpi = 200)
     
-    print(f'Done. FE model exported to {output_path} .')
+    print(f'[INF] FE model exported to {output_path}')
+    
+print(f'\nDone.')
