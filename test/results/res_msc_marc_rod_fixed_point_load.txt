@@ -1,28 +1,24 @@
 #----------------------------------------------------------------------------------------#
 #
-# Nodal and elemental results for: ws_09_10.txt
+# NODAL AND ELEMENTAL RESULTS FOR: msc_marc_rod_fixed_point_load.txt
 # 
 # SUMMARY FE PROBLEM SIZE OVERVIEW
-# Number of nodes: 3
-# Number of elements: 2
-# Total number of degrees of freedom: 8
+# NUMBER OF NODES: 2
+# NUMBER OF ELEMENTS: 1
+# TOTAL NUMBER OF DEGREES OF FREEDOM: 4
 #
 #----------------------------------------------------------------------------------------#
 
 # Displacement ( nid, Ux, Uy, URz )
 1, 0.0000e+00, 0.0000e+00, 
-2, -2.5930e-01, -2.4452e+00, 6.2867e-01, 
-3, 0.0000e+00, 0.0000e+00, 0.0000e+00, 
+2, 5.0000e-01, 0.0000e+00, 
 
 # Reaction forces ( nid, RFx, RFy, RMz )
-1, -2.5930e+03, 1.4971e+03, 
-2, 4.5475e-13, -2.6603e-11, 1.0000e+06, 
-3, 2.5930e+03, 1.5205e+03, 5.0880e+05, 
+1, -5.0000e+00, 0.0000e+00, 
+2, 5.0000e+00, 0.0000e+00, 
 
 # Element strains ( eid, strain at point 1, strain at point 2 )
-1, -9.9804e-04, -9.9804e-04
-2, -2.8840e-03, 3.4026e-03
+1, 5.0000e-01, 5.0000e-01
 
 # Element stresses ( eid, strain at point 1, strain at point 2 )
-1, -1.9961e+02, -1.9961e+02
-2, -5.7681e+02, 6.8053e+02
+1, 1.0000e+01, 1.0000e+01

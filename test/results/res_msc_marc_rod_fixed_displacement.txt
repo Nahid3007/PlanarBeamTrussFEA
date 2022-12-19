@@ -1,0 +1,24 @@
+#----------------------------------------------------------------------------------------#
+#
+# NODAL AND ELEMENTAL RESULTS FOR: msc_marc_rod_fixed_displacement.txt
+# 
+# SUMMARY FE PROBLEM SIZE OVERVIEW
+# NUMBER OF NODES: 2
+# NUMBER OF ELEMENTS: 1
+# TOTAL NUMBER OF DEGREES OF FREEDOM: 4
+#
+#----------------------------------------------------------------------------------------#
+
+# Displacement ( nid, Ux, Uy, URz )
+1, 0.0000e+00, 0.0000e+00, 
+2, 5.0000e-01, 0.0000e+00, 
+
+# Reaction forces ( nid, RFx, RFy, RMz )
+1, -5.0000e+00, 0.0000e+00, 
+2, 5.0000e+00, 0.0000e+00, 
+
+# Element strains ( eid, strain at point 1, strain at point 2 )
+1, 5.0000e-01, 5.0000e-01
+
+# Element stresses ( eid, strain at point 1, strain at point 2 )
+1, 1.0000e+01, 1.0000e+01
