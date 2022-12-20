@@ -42,35 +42,43 @@ def global_nodal_dofs(nodes, elements):
 
 # Gobal degree of freemdom for each element
 
-def global_element_dofs(nodes, elements,global_ndof):
+def global_element_dofs(nodes, elements, global_ndof):
 
     global_edof = {}
 
     for eid in sorted(elements.keys()):
+
         n1 = elements[eid].n1
         n2 = elements[eid].n2
+        
         if elements[eid].elem_type == 'rod':
-            n_dof = 2
+            len_dof = 2
         else:
-            n_dof = 3
+            len_dof = 3
+        
+        # print(f'[DEB] {eid}, {n1}, {n2}, {elements[eid].elem_type}, {len_dof} ') # For debug purposes 
+
         for nid in sorted(global_ndof.keys()):
             if nid == n1:
                 dofs = global_ndof[nid]
                 for i in range(len(dofs)):
-                    if i < n_dof:
+                    if i < len_dof:
                         if eid in global_edof:
                             global_edof[eid].append(dofs[i])
                         else:
                             global_edof[eid] = [dofs[i]]
-                        # print('Loop 1: n1 ->',global_edof)
-            if nid == n2:
+                    # print(f'      n1: {n1} -> {global_edof}')
+
+            elif nid == n2:
                 dofs = global_ndof[nid]
                 for i in range(len(dofs)):
-                    # if i < x:
-                    if eid in global_edof and i < n_dof:
-                        global_edof[eid].append(dofs[i])
-                    # print('Loop 2: n2 ->',global_edof)      
-        
+                    if i < len_dof:
+                        if eid in global_edof:
+                            global_edof[eid].append(dofs[i])
+                        else:
+                            global_edof[eid] = [dofs[i]]
+                    # print(f'      n2: {n2} -> {global_edof}')
+      
     return global_edof
 
 # Total number of degree of freedom
@@ -232,19 +240,24 @@ def solve_structure_eq(f_bb, K_freedofs):
 
 def postprocess_structural_results(f, u, u_freedofs, freedofs, global_edof, K, nodes, elements, propRod, propBeam):
 
-    # displacements
+    # sort solved displacements
+    
     for r,s in zip(freedofs-1,range(freedofs.shape[0])):
         u[r,0] = u_freedofs[s,0]
-        
-    # reaction forces
-    f_r = np.dot(K,u)
+
+    # calculate reaction forces
     
+    f_r = np.dot(K,u)
+
     # calculate strains and stresses
+
     epsilon = np.zeros([len(elements),2])
     sigma = np.zeros([len(elements),2])
     
     for eid in sorted(elements.keys()):
+    
         # ROD elements 
+    
         if elements[eid].elem_type == 'rod':
             
             l = elements[eid].length(nodes)
@@ -254,24 +267,33 @@ def postprocess_structural_results(f, u, u_freedofs, freedofs, global_edof, K, n
                             [0, 0, c, s] ]) 
             
             # elements nodal dofs
+            
             e_ndofs = global_edof[eid]
             
             # local element displacement
+            
             u_e = np.zeros([len(e_ndofs),1])
+
+            # print(f'[DEBUG] {eid}, {u_e}')
+            
             for i,j in zip(e_ndofs,range(len(e_ndofs))):
                 i = i - 1
                 u_e[j,0] = u[i,0]
                 u_local = np.dot(T,u_e) 
                 
             # Displacement
+            
             B = np.matrix([ [-1/l, 1/l] ])
             
             # strain
+            
             epsilon[eid-1] = np.dot(B,u_local)
             # stress
+            
             sigma[eid-1] = propRod[eid].E*epsilon[eid-1,0]
             
         # BEAM elements    
+        
         elif elements[eid].elem_type == 'beam':
             
             E = propBeam[eid].E
@@ -286,10 +308,13 @@ def postprocess_structural_results(f, u, u_freedofs, freedofs, global_edof, K, n
                            [ 0, 0, 0, 0, 0, 1] ])
             
             # elements nodal dofs
+            
             e_ndofs = global_edof[eid]
             
             # local element displacement
+            
             u_e = np.zeros([len(e_ndofs),1])
+            
             for i,j in zip(e_ndofs,range(len(e_ndofs))):
                 i = i - 1
                 u_e[j,0] = u[i,0]
@@ -319,6 +344,7 @@ def postprocess_structural_results(f, u, u_freedofs, freedofs, global_edof, K, n
             epsilon[eid-1][0] = epsilon_bottom+epsilon_axial
             
             # stress
+            
             sigma_axial = np.dot(B_axial,u_axial)*E
             
             sigma_top = - (h_max)*np.dot(B_bending,u_bending)*E
@@ -388,7 +414,7 @@ def write_results(u, f_r, epsilon, sigma, global_ndof, total_ndof, nodes, elemen
         for eid in sorted(elements.keys()):
             f.write(f'{eid}, {"%.4e" % sigma[eid-1].item(0)}, {"%.4e" % sigma[eid-1].item(1)}\n')
 
-    print(f'      Results written to ./results')
+    print(f'      Results written to ./results/res_{output_name}')
 
 
 #------------------------------------------------------------------------------------------------------------------#
@@ -397,29 +423,56 @@ def write_results(u, f_r, epsilon, sigma, global_ndof, total_ndof, nodes, elemen
 
 
 if __name__ == '__main__': 
-    
+        
     filename = sys.argv[1]
-    
+
     # P A R S E  I N P U T  F I L E
     
+    print(f'[INF] Run Linear Static Solver')
     print(f'[INF] Parsing input file: {filename}')
     
-    nodes, elements, propRod, propBeam, load, spc = parseInputFile('./input_files/'+filename)
-    
+    try:
+        nodes, elements, propRod, propBeam, load, spc = parseInputFile('./input_files/'+filename)
+    except FileNotFoundError:
+        print(f'[ERR] Input file not found. Please check')
+        print(f'      Exit script')
+        sys.exit(1)
+
     print(f'      Number of nodes: {len(nodes)}')
     print(f'      Number of elements: {len(elements)}')
-    print(f'      Number of SPCs: {len(spc)}')
-    print(f'      Number of loads: {len(load)}')
+    print(f'      Number of SPCs: {len([ i for nid in sorted(spc.keys()) for i in range(len(spc[nid]))])}')
+    print(f'      Number of loads: {len([ i for nid in sorted(load.keys()) for i in range(len(load[nid]))])}')
+
+    print(f'[INF] Element properties (eid, n1, n2, l, alpha, E, A, I)')
+    
+    for eid in sorted(elements.keys()):
+        rotAngle = elements[eid].rotationAngle(nodes)*(180/(np.pi))
+        if elements[eid].elem_type == 'rod':
+            print(f'      {eid}, {elements[eid].n1}, {elements[eid].n2}, {"%.2f"%elements[eid].length(nodes)}, {"%.2f"%rotAngle}, {propRod[eid].E}, {propRod[eid].A}')
+        elif elements[eid].elem_type == 'beam':
+            print(f'      {eid}, {elements[eid].n1}, {elements[eid].n2}, {"%.2f"%elements[eid].length(nodes)}, {"%.2f"%rotAngle}, {propBeam[eid].E}, {propBeam[eid].A}, {propBeam[eid].I}')
+    
+    print(f'[INF] SPCs (nid, first DOF, last DOF, value)')
+    
+    for nid in sorted(spc.keys()):
+        for i in range(len(spc[nid])):
+            print(f'      {nid}, {spc[nid][i].first_dof}, {spc[nid][i].last_dof}, {spc[nid][i].value}')
+
+    print(f'[INF] Loads (nid, DOF, value)')
+    
+    for nid in sorted(load.keys()):
+        for i in range(len(load[nid])):
+            print(f'      {nid}, {load[nid][i].local_dof}, {load[nid][i].value}')
     
     # G L O B A L  D O F S
     
     print(f'[INF] Map nodal local DOF to global DOF')
     
     global_ndof = global_nodal_dofs(nodes, elements)
+    print(f'      Nodal DOF mapping: {global_ndof}')
     total_ndof  = total_dof(global_ndof)
     global_edof = global_element_dofs(nodes, elements, global_ndof)
-    
-    print(f'      Total number of DOF: {total_ndof}')
+    print(f'      Element DOF mapping: {global_edof}')
 
     # A S S E M B L E  G L O B A L  S T I F F N E S S  M A T R I X
     
@@ -427,10 +480,10 @@ if __name__ == '__main__':
     
     K = assemble_global_stiffness_matrix(nodes, elements, propRod, propBeam, total_ndof, global_edof)
     
-    print(f'      Global stiffnes matrix size: {K.shape}')
+    print(f'      Global stiffness matrix size: {K.shape}')
     
     
-    # S E T U P  A N D  S O L V E  S Y S T E M  O F  E Q U A T I O N
+    # # S E T U P  A N D  S O L V E  S Y S T E M  O F  E Q U A T I O N
     
     print(f'[INF] Solve linear system of equations K * u = f')
     
@@ -455,7 +508,7 @@ if __name__ == '__main__':
 
     # W R I T E  O U T  R E S U L T S
     
-    print(f'[INF] Write FE results to file')
+    #print(f'[INF] Write FE results to file')
     
     write_results(u, f_r, epsilon, sigma, global_ndof, total_ndof, nodes, elements, filename)
     

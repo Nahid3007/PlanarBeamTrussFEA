@@ -22,7 +22,8 @@ class Element:
         self.n1 = int(n1)
         self.n2 = int(n2)
         
-    # calculate the length of each element    
+    # calculate the length of each element
+         
     def length(self, nodes):
         n1x = nodes[self.n1].x
         n2x = nodes[self.n2].x
@@ -33,36 +34,58 @@ class Element:
         return element_length
         
     # calculate the roation of each element in global coordinate system
+
     def rotationAngle(self,nodes):
+        
         n1x = nodes[self.n1].x
         n2x = nodes[self.n2].x
         n1y = nodes[self.n1].y
         n2y = nodes[self.n2].y
 
-        if n1x < n2x and n1y == n2y:
+        # Case 1 : alpha = 0°
+        if (n1x < n2x) and (n1y == n2y):
             alpha = 0
-        elif n1x > n2x and n1y == n2y:
-            alpha = np.pi
-        elif n1y < n2y and n1x == n2x:
+
+        # Case 2 : alpha = 90°
+        elif (n1x == n2x) and (n1y < n2y):
             alpha = np.pi/2
-        elif n1y > n2y and n1x == n2x:
+        
+        # Case 3 : alpha = 180°
+        elif (n1x > n2x) and (n1y == n2y):
+            alpha = np.pi
+        
+        # Case 4 : alpha = 270°
+        elif (n1x == n2x) and (n1y > n2y):
             alpha = (3/2)*np.pi
-        elif n1x < n2x and n1y < n2y:
+
+        # Case 5 : 0° < alpha < 90°
+        elif (n1x < n2x) and (n1y < n2y):
             alpha = np.arctan(abs(n2y-n1y)/abs(n2x-n1x))
-        elif n1x > n2x and n1y < n2y:
+
+        # Case 6 : 90° < alpha < 180°
+        elif (n1x > n2x) and (n1y < n2y):
             alpha = np.pi - np.arctan(abs(n2y-n1y)/abs(n2x-n1x))
-        elif n1x > n2x and n1y > n2y:
-            alpha = (3/2)*np.pi - np.arctan(abs(n1y-n2y)/abs(n1x-n2x))
-        elif n1x < n2x and n1y > n2y:
-            alpha = (3/2)*np.pi + np.arctan(abs(n1y-n2y)/abs(n1x-n2x))
+
+        # Case 7 : 180° < alpha < 270°       
+        elif (n1x > n2x) and (n1y > n2y):
+            alpha = np.pi + np.arctan(abs(n2y-n1y)/abs(n2x-n1x))
+
+        # Case 8: 270° < alpha < 360°
+        elif (n1x < n2x) and (n1y > n2y):
+            alpha = (3/2)*np.pi + np.arctan(abs(n2x-n1x)/abs(n2y-n1y))
+        
         else:
-            print('No rotation angle can be calculated.')
+            print(f'[ERR] Fail to calculate element rotation angle. Please check input')
+            exit
         
         return alpha
     
     # calculate elements stiffness matrix in global coordinates
+
     def stiffnessMatrix(self, elements, eid, nodes, propRod, propBeam):
+        
         # rod element
+        
         if elements[eid].elem_type == 'rod':
             E = propRod[eid].E
             A = propRod[eid].A
@@ -80,7 +103,9 @@ class Element:
             ke_g = T.transpose()*(ke0*ke_l)*T
         
         # beam element
+        
         elif elements[eid].elem_type == 'beam':
+            
             E = propBeam[eid].E
             A = propBeam[eid].A
             I = propBeam[eid].I
@@ -137,6 +162,7 @@ class Load:
         self.local_dof = int(local_dof)
     
     # calculate the load in global dof    
+    
     def global_dof(self, global_ndof):
         global_dof = global_ndof[self.nid][self.local_dof-1]
         
@@ -155,6 +181,7 @@ class Boundary:
         self.fixed_local_dof = np.array([i for i in range(self.first_dof, self.last_dof +1)])
 
     # calculate spc in global dof
+    
     def global_dof(self, global_ndof):        
         fixed_global_dof = np.array([], dtype=int)
         

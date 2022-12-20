@@ -16,7 +16,12 @@ if __name__ == '__main__':
     
     print(f'[INF] Parsing input file {filename}')
     
-    nodes, elements, propRod, propBeam, load, spc = parseInputFile('./input_files/'+filename)
+    try:
+        nodes, elements, propRod, propBeam, load, spc = parseInputFile('./input_files/'+filename)
+    except FileNotFoundError:
+        print(f'[ERR] Input file not found. Please check')
+        print(f'      Exit script')
+        sys.exit(1)
     
     # Plot node, elements
     
@@ -70,10 +75,10 @@ if __name__ == '__main__':
     
     # plt.annotate(str('COG'), (centroid[0],centroid[1]), textcoords='offset points', xytext=(10,5), ha='right', fontsize = 8, color='orange')
     plt.arrow(centroid[0],centroid[1], axis_scale, 0, fc="orange", ec="orange", head_width=scale_head_length, head_length=scale_head_width )
-    plt.annotate('x', (centroid[0],centroid[1]), textcoords='offset points', xytext=(450*axis_scale,0*axis_scale), ha='right', fontsize = 10, color='orange')
+    # plt.annotate('x', (centroid[0],centroid[1]), textcoords='offset points', xytext=(450*axis_scale,0*axis_scale), ha='right', fontsize = 10, color='orange')
     
     plt.arrow(centroid[0],centroid[1], 0, axis_scale, fc="orange", ec="orange", head_width=scale_head_length, head_length=scale_head_width )
-    plt.annotate('Y', (centroid[0],centroid[1]), textcoords='offset points', xytext=(0*axis_scale,300*axis_scale), ha='right', fontsize = 10, color='orange')
+    # plt.annotate('Y', (centroid[0],centroid[1]), textcoords='offset points', xytext=(0*axis_scale,300*axis_scale), ha='right', fontsize = 10, color='orange')
     
     # Plot applied forces
     
@@ -89,44 +94,44 @@ if __name__ == '__main__':
     for nid in sorted(load.keys()):
         for i in range(len(load[nid])):
             
-            print(f'[INF] Load: {nid.strip()}, {load[nid][i].local_dof}, {load[nid][i].value}')
+            # print(f'[INF] Load: {nid.strip()}, {load[nid][i].local_dof}, {load[nid][i].value}') # For debug purpuse
            
             # Plot Forces
             
             if load[nid][i].local_dof == 1 and load[nid][i].value < 0:    
                 plt.arrow( nodes[int(nid)].x, nodes[int(nid)].y, -scale, 0, fc="g", ec="g", head_width=scale_head_length, head_length=scale_head_width )
-                plt.annotate( 'F = '+str(load[nid][i].value), (nodes[int(nid)].x,nodes[int(nid)].y), textcoords='offset points', xytext=(-250*scale,30*scale), ha='right', fontsize = 10, color='g')
+                # plt.annotate( 'F = '+str(load[nid][i].value), (nodes[int(nid)].x,nodes[int(nid)].y), textcoords='offset points', xytext=(-250*scale,30*scale), ha='right', fontsize = 10, color='g')
             
             elif load[nid][i].local_dof == 1 and load[nid][i].value > 0:    
                 plt.arrow( nodes[int(nid)].x, nodes[int(nid)].y, scale, 0, fc="g", ec="g", head_width=scale_head_length, head_length=scale_head_width )
-                plt.annotate('F = '+str(load[nid][i].value), (nodes[int(nid)].x,nodes[int(nid)].y), textcoords='offset points', xytext=(400*scale,30*scale), ha='right', fontsize = 10, color='g')
+                # plt.annotate('F = '+str(load[nid][i].value), (nodes[int(nid)].x,nodes[int(nid)].y), textcoords='offset points', xytext=(400*scale,30*scale), ha='right', fontsize = 10, color='g')
             
             elif load[nid][i].local_dof == 2 and load[nid][i].value < 0:    
                 plt.arrow( nodes[int(nid)].x, nodes[int(nid)].y, 0, -scale, fc="g", ec="g", head_width=scale_head_length, head_length=scale_head_width )
-                plt.annotate('F = '+str(load[nid][i].value), (nodes[int(nid)].x,nodes[int(nid)].y), textcoords='offset points', xytext=(-30*scale,-200*scale), ha='right', fontsize = 10, color='g')
+                # plt.annotate('F = '+str(load[nid][i].value), (nodes[int(nid)].x,nodes[int(nid)].y), textcoords='offset points', xytext=(-30*scale,-200*scale), ha='right', fontsize = 10, color='g')
             
             elif load[nid][i].local_dof == 2 and load[nid][i].value > 0:    
                 plt.arrow( nodes[int(nid)].x, nodes[int(nid)].y, 0, scale, fc="g", ec="g", head_width=scale_head_length, head_length=scale_head_width )
-                plt.annotate('F = '+str(load[nid][i].value), (nodes[int(nid)].x,nodes[int(nid)].y), textcoords='offset points', xytext=(-30*scale,200*scale), ha='right', fontsize = 10, color='g')
+                # plt.annotate('F = '+str(load[nid][i].value), (nodes[int(nid)].x,nodes[int(nid)].y), textcoords='offset points', xytext=(-30*scale,200*scale), ha='right', fontsize = 10, color='g')
     
             # Plot Moments
             
             elif load[nid][i].local_dof == 3 and load[nid][i].value > 0:
                 a3 = patches.FancyArrowPatch((nodes[int(nid)].x, nodes[int(nid)].y+scale), (nodes[int(nid)].x, nodes[int(nid)].y-scale), connectionstyle="arc3,rad=.4", **kwPos)
                 plt.gca().add_patch(a3)
-                #plt.annotate(str(load[nid][i].value), (nodes[int(nid)].x,nodes[int(nid)].y), textcoords='offset points', xytext=(-15,5), ha='right', fontsize = 12, color='g')
+                # plt.annotate(str(load[nid][i].value), (nodes[int(nid)].x,nodes[int(nid)].y), textcoords='offset points', xytext=(-15,5), ha='right', fontsize = 12, color='g')
             
             elif load[nid][i].local_dof == 3 and load[nid][i].value < 0:
                 a3 = patches.FancyArrowPatch((nodes[int(nid)].x, nodes[int(nid)].y+scale), (nodes[int(nid)].x, nodes[int(nid)].y-scale), connectionstyle="arc3,rad=.4", **kwNeg)
                 plt.gca().add_patch(a3)
-                #plt.annotate(str(load[nid][i].value), (nodes[int(nid)].x,nodes[int(nid)].y), textcoords='offset points', xytext=(-15,5), ha='right', fontsize = 12, color='g')
+                # plt.annotate(str(load[nid][i].value), (nodes[int(nid)].x,nodes[int(nid)].y), textcoords='offset points', xytext=(-15,5), ha='right', fontsize = 12, color='g')
     
     # Plot constraints
     
     for nid in sorted(spc.keys()):
         for i in range(len(spc[nid])):
             
-            print(f'[INF]  SPC: {nid}, {spc[nid][i].fixed_local_dof}, {spc[nid][i].value}')
+            # print(f'[INF] SPC : {nid}, {spc[nid][i].fixed_local_dof}, {spc[nid][i].value}') # For debug purpose
             
             if len(spc[nid][i].fixed_local_dof) == 3:
                 plt.plot( [nodes[int(nid)].x],[nodes[int(nid)].y], marker='s', markersize= 10, fillstyle='full', color='b')
@@ -142,14 +147,14 @@ if __name__ == '__main__':
 
                 elif spc[nid][i].fixed_local_dof[0] == 1 and spc[nid][i].value != 0:
                     plt.plot( [nodes[int(nid)].x],[nodes[int(nid)].y], marker=5, markersize= 12, fillstyle='full', color='g')
-                    plt.annotate('u = '+str(spc[nid][i].value), (nodes[int(nid)].x,nodes[int(nid)].y), textcoords='offset points', xytext=(-50*scale,35*scale), ha='right', fontsize = 10, color='g')
+                    # plt.annotate('u = '+str(spc[nid][i].value), (nodes[int(nid)].x,nodes[int(nid)].y), textcoords='offset points', xytext=(-50*scale,35*scale), ha='right', fontsize = 10, color='g')
 
                 elif spc[nid][i].fixed_local_dof[0] == 2 and spc[nid][i].value == 0:
                     plt.plot( [nodes[int(nid)].x],[nodes[int(nid)].y], marker=6, markersize= 12, fillstyle='full', color='b')
 
                 elif spc[nid][i].fixed_local_dof[0] == 2 and spc[nid][i].value != 0:
                     plt.plot( [nodes[int(nid)].x],[nodes[int(nid)].y], marker=6, markersize= 12, fillstyle='full', color='g')
-                    plt.annotate('u = '+str(spc[nid][i].value), (nodes[int(nid)].x,nodes[int(nid)].y), textcoords='offset points', xytext=(240*scale,-100*scale), ha='right', fontsize = 10, color='g')
+                    # plt.annotate('u = '+str(spc[nid][i].value), (nodes[int(nid)].x,nodes[int(nid)].y), textcoords='offset points', xytext=(240*scale,-100*scale), ha='right', fontsize = 10, color='g')
     
     # Output
     
@@ -161,4 +166,4 @@ if __name__ == '__main__':
     
     print(f'[INF] FE model exported to {output_path}')
     
-print(f'\nDone.')
+print(f'\nDone.\n')
