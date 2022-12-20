@@ -1,0 +1,30 @@
+#----------------------------------------------------------------------------------------#
+#
+# NODAL AND ELEMENTAL RESULTS FOR: plane_truss_triangle_F.txt
+# 
+# SUMMARY FE PROBLEM SIZE OVERVIEW
+# NUMBER OF NODES: 3
+# NUMBER OF ELEMENTS: 3
+# TOTAL NUMBER OF DEGREES OF FREEDOM: 6
+#
+#----------------------------------------------------------------------------------------#
+
+# Displacement ( nid, Ux, Uy, URz )
+1, -4.7137e-19, 0.0000e+00, 
+2, 1.6667e-02, -5.7735e-03, 
+3, 0.0000e+00, 0.0000e+00, 
+
+# Reaction forces ( nid, RFx, RFy, RMz )
+1, 0.0000e+00, 5.7735e-02, 
+2, 1.0000e-01, 0.0000e+00, 
+3, -1.0000e-01, -5.7735e-02, 
+
+# Element strains ( eid, strain at point 1, strain at point 2 )
+1, -5.7735e-03, -5.7735e-03
+2, 1.1547e-02, 1.1547e-02
+3, 4.0822e-19, 4.0822e-19
+
+# Element stresses ( eid, strain at point 1, strain at point 2 )
+1, -1.1547e-01, -1.1547e-01
+2, 2.3094e-01, 2.3094e-01
+3, 8.1643e-18, 8.1643e-18
