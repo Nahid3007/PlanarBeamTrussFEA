@@ -23,11 +23,12 @@ if __name__ == '__main__':
         print(f'      Exit script')
         sys.exit(1)
     
-    # Plot node, elements
+    # Plot nodes, elements
     
     el_length = []
     
     for eid in sorted(elements.keys()):
+        
         # print(eid, elements[eid].elem_type, elements[eid].n1, elements[eid].n2)
         
         e_length = elements[eid].length(nodes)
@@ -52,10 +53,10 @@ if __name__ == '__main__':
         plt.plot( [n1x,n2x],[n1y,n2y], linestyle='-', color='#808080', linewidth=elemWidth)
         plt.plot( [n1x,n2x],[n1y,n2y], marker='o', color='#F97306', markersize=5, linestyle='None')
         
-        plt.annotate(str(int(elements[eid].n1)), (n1x,n1y), textcoords='offset points', xytext=(10,5), ha='right', fontsize = 12, color='black')
-        plt.annotate(str(int(elements[eid].n2)), (n2x,n2y), textcoords='offset points', xytext=(10,5), ha='right', fontsize = 12, color='black')
+        plt.annotate(str(int(elements[eid].n1)), (n1x,n1y), textcoords='offset points', xytext=(10,5), ha='right', fontsize = 8, color='black')
+        plt.annotate(str(int(elements[eid].n2)), (n2x,n2y), textcoords='offset points', xytext=(10,5), ha='right', fontsize = 8, color='black')
         
-        plt.annotate(str(int(eid)),(dx,dy), ha='center',fontsize = 12, color='#380282')
+        plt.annotate(str(int(eid)),(dx,dy), ha='center',fontsize = 8, color='#380282')
         
         plt.axis('equal')
         plt.axis('off')
@@ -74,10 +75,13 @@ if __name__ == '__main__':
     scale_head_width  = axis_scale*0.15
     
     # plt.annotate(str('COG'), (centroid[0],centroid[1]), textcoords='offset points', xytext=(10,5), ha='right', fontsize = 8, color='orange')
+   
     plt.arrow(centroid[0],centroid[1], axis_scale, 0, fc="orange", ec="orange", head_width=scale_head_length, head_length=scale_head_width )
+   
     # plt.annotate('x', (centroid[0],centroid[1]), textcoords='offset points', xytext=(450*axis_scale,0*axis_scale), ha='right', fontsize = 10, color='orange')
     
     plt.arrow(centroid[0],centroid[1], 0, axis_scale, fc="orange", ec="orange", head_width=scale_head_length, head_length=scale_head_width )
+   
     # plt.annotate('Y', (centroid[0],centroid[1]), textcoords='offset points', xytext=(0*axis_scale,300*axis_scale), ha='right', fontsize = 10, color='orange')
     
     # Plot applied forces
@@ -85,8 +89,14 @@ if __name__ == '__main__':
     kwPos = dict(arrowstyle="-|>, head_length=6, head_width=3", color="g")
     kwNeg = dict(arrowstyle="<|-, head_length=6, head_width=3", color="g")
     
+    # Scale for force
     f_vector_scale = 0.18
     
+    # Scale for moment
+    m_scale = 0.7
+    m_style = "arc3,rad=.1"
+
+
     scale = max(el_length)*f_vector_scale
     scale_head_length = scale*0.12
     scale_head_width  = scale*0.12
@@ -117,12 +127,12 @@ if __name__ == '__main__':
             # Plot Moments
             
             elif load[nid][i].local_dof == 3 and load[nid][i].value > 0:
-                a3 = patches.FancyArrowPatch((nodes[int(nid)].x, nodes[int(nid)].y+scale), (nodes[int(nid)].x, nodes[int(nid)].y-scale), connectionstyle="arc3,rad=.4", **kwPos)
+                a3 = patches.FancyArrowPatch((nodes[int(nid)].x, nodes[int(nid)].y+m_scale), (nodes[int(nid)].x, nodes[int(nid)].y-m_scale), connectionstyle=m_style, **kwPos)
                 plt.gca().add_patch(a3)
                 # plt.annotate(str(load[nid][i].value), (nodes[int(nid)].x,nodes[int(nid)].y), textcoords='offset points', xytext=(-15,5), ha='right', fontsize = 12, color='g')
             
             elif load[nid][i].local_dof == 3 and load[nid][i].value < 0:
-                a3 = patches.FancyArrowPatch((nodes[int(nid)].x, nodes[int(nid)].y+scale), (nodes[int(nid)].x, nodes[int(nid)].y-scale), connectionstyle="arc3,rad=.4", **kwNeg)
+                a3 = patches.FancyArrowPatch((nodes[int(nid)].x, nodes[int(nid)].y+m_scale), (nodes[int(nid)].x, nodes[int(nid)].y-m_scale), connectionstyle=m_style, **kwNeg)
                 plt.gca().add_patch(a3)
                 # plt.annotate(str(load[nid][i].value), (nodes[int(nid)].x,nodes[int(nid)].y), textcoords='offset points', xytext=(-15,5), ha='right', fontsize = 12, color='g')
     
@@ -155,7 +165,17 @@ if __name__ == '__main__':
                 elif spc[nid][i].fixed_local_dof[0] == 2 and spc[nid][i].value != 0:
                     plt.plot( [nodes[int(nid)].x],[nodes[int(nid)].y], marker=6, markersize= 12, fillstyle='full', color='g')
                     # plt.annotate('u = '+str(spc[nid][i].value), (nodes[int(nid)].x,nodes[int(nid)].y), textcoords='offset points', xytext=(240*scale,-100*scale), ha='right', fontsize = 10, color='g')
-    
+
+                elif spc[nid][i].fixed_local_dof == 3 and spc[nid][i].value > 0:
+                    a3 = patches.FancyArrowPatch((nodes[int(nid)].x, nodes[int(nid)].y+m_scale), (nodes[int(nid)].x, nodes[int(nid)].y-m_scale), connectionstyle=m_style, **kwPos)
+                    plt.gca().add_patch(a3)
+                    # plt.annotate(str(load[nid][i].value), (nodes[int(nid)].x,nodes[int(nid)].y), textcoords='offset points', xytext=(-15,5), ha='right', fontsize = 12, color='g')
+            
+                elif spc[nid][i].fixed_local_dof == 3 and spc[nid][i].value < 0:
+                    a3 = patches.FancyArrowPatch((nodes[int(nid)].x, nodes[int(nid)].y+m_scale), (nodes[int(nid)].x, nodes[int(nid)].y-m_scale), connectionstyle=m_style, **kwNeg)
+                    plt.gca().add_patch(a3)
+                    # plt.annotate(str(load[nid][i].value), (nodes[int(nid)].x,nodes[int(nid)].y), textcoords='offset points', xytext=(-15,5), ha='right', fontsize = 12, color='g')
+            
     # Output
     
     fig_fem_model_input = filename.replace('.txt','')+'_FE_Model.png'

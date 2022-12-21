@@ -1,30 +1,57 @@
-#----------------------------------------------------------------------------------------#
-#
-# NODAL AND ELEMENTAL RESULTS FOR: plane_truss_triangle_U.txt
-# 
-# SUMMARY FE PROBLEM SIZE OVERVIEW
-# NUMBER OF NODES: 3
-# NUMBER OF ELEMENTS: 3
-# TOTAL NUMBER OF DEGREES OF FREEDOM: 6
-#
-#----------------------------------------------------------------------------------------#
+ 
+GUID : 8c3732a8-d814-415d-97ab-68f3e20292d0
+ 
+                                      R e s u l t s                                       
+ 
+              Linear Static Analysis for Planar Truss and Beam Structures
+ 
+ 
+ Input file: plane_truss_triangle_U.txt
+ 
+ 
+                        S u m m a r y   F E   M o d e l   S i z e
+ 
+                              Number of Nodes       3
+                              Number of Elements    3
+                                     incl.  Rods    3
+                                     incl. Beams    0
+                              Total Number of DOFs  6
+                              Number of SPCs        3
+                              Number of Loads       0
+                              Location COG          (-0.2886751346, 0.5)
+ 
 
-# Displacement ( nid, Ux, Uy, URz )
-1, -2.8282e-19, 0.0000e+00, 
-2, 1.0000e-02, -3.4641e-03, 
-3, 0.0000e+00, 0.0000e+00, 
+ 
+                          N o d a l    D i s p l a c e m e n t s
 
-# Reaction forces ( nid, RFx, RFy, RMz )
-1, 0.0000e+00, 3.4641e-02, 
-2, 6.0000e-02, 0.0000e+00, 
-3, -6.0000e-02, -3.4641e-02, 
+nid     u_x             u_y             u_R            
+1       4.4444e-03      0.0000e+00
+2       1.0000e-02     -1.9245e-03
+3       0.0000e+00      0.0000e+00
 
-# Element strains ( eid, strain at point 1, strain at point 2 )
-1, -3.4641e-03, -3.4641e-03
-2, 6.9282e-03, 6.9282e-03
-3, 2.4493e-19, 2.4493e-19
+ 
+                        N o d a l   R e a c t i o n   F o r c e s
 
-# Element stresses ( eid, strain at point 1, strain at point 2 )
-1, -6.9282e-02, -6.9282e-02
-2, 1.3856e-01, 1.3856e-01
-3, 4.8986e-18, 4.8986e-18
+nid     RF_x            RF_y            RM             
+1      -5.2042e-18     -3.8490e-02
+2       3.3333e-02      0.0000e+00
+3      -3.3333e-02      3.8490e-02
+
+ 
+                            E l e m e n t a l   S t r a i n s
+
+eid     Pt. 1           Pt. 2          
+1       3.8490e-03      3.8490e-03
+2      -1.9245e-03     -1.9245e-03
+3       3.8490e-03      3.8490e-03
+
+ 
+                           E l e m e n t a l   S t r e s s e s
+
+eid     Pt. 1           Pt. 2          
+1       7.6980e-02      7.6980e-02
+2      -3.8490e-02     -3.8490e-02
+3       7.6980e-02      7.6980e-02
+ 
+
+                               E n d   o f   R e s u l t s 

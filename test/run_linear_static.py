@@ -2,6 +2,7 @@ from parse_input_file import*
 
 import sys
 import numpy as np
+import uuid
 
 #------------------------------------------------------------------------------------------------------------------#
 #                                   L O C A L  T O  G L O B A L  D O F  M A P P I N G                              #
@@ -360,59 +361,134 @@ def postprocess_structural_results(f, u, u_freedofs, freedofs, global_edof, K, n
 #                                              W R I T E  R E S U L T S                                            #
 #------------------------------------------------------------------------------------------------------------------#
 
-def write_results(u, f_r, epsilon, sigma, global_ndof, total_ndof, nodes, elements, filename):
+def write_results(u, f_r, epsilon, sigma, global_ndof, total_ndof, nodes, elements, spc, load, propRod, propBeam, filename):
 
     output_name = filename
+
+    # compute center of gravity
+
+    centroid = np.array([0.,0.])
+    
+    for nid in sorted(nodes.keys()):
+        centroid += nodes[nid].coordinates
+        
+    centroid = centroid/len(nodes)
+
+    cog = (centroid[0],centroid[1])
+
+    # counting number of rod and beam elements
+
+    sum_e_rod = 0
+    sum_e_beam = 0
+
+    for eid in sorted(elements.keys()):
+        if elements[eid].elem_type == 'rod':
+            sum_e_rod += 1
+        elif elements[eid].elem_type == 'beam':
+            sum_e_beam += 1
     
     with open('./results/'+'res_'+output_name,'w') as f:
-        f.write(f'#----------------------------------------------------------------------------------------#\n')
-        f.write(f'#\n')
-        f.write(f'# NODAL AND ELEMENTAL RESULTS FOR: {filename}\n')
-        f.write(f'# \n')
-        f.write(f'# SUMMARY FE PROBLEM SIZE OVERVIEW\n')
-        f.write(f'# NUMBER OF NODES: {len(nodes)}\n')
-        f.write(f'# NUMBER OF ELEMENTS: {len(elements)}\n')
-        f.write(f'# TOTAL NUMBER OF DEGREES OF FREEDOM: {total_ndof}\n')
-        f.write(f'#\n')
-        f.write(f'#----------------------------------------------------------------------------------------#\n')
+        # f.write(f'#----------------------------------------------------------------------------------------#\n')
+        f.write(f' \n')
+        f.write(f'GUID : {uuid.uuid4()}\n')
+        f.write(f' \n')
+        f.write(f'                                      R e s u l t s                                       \n')
+        f.write(f' \n')
+        f.write(f'              Linear Static Analysis for Planar Truss and Beam Structures\n')
+        f.write(f' \n')
+        f.write(f' \n')
+        f.write(f' Input file: {filename}\n')
+        f.write(f' \n')
+        f.write(f' \n')
+        f.write(f'                        S u m m a r y   F E   M o d e l   S i z e\n')
+        f.write(f' \n')
+        f.write(f'                              Number of Nodes       {len(nodes)}\n')
+        f.write(f'                              Number of Elements    {len(elements)}\n')
+        f.write(f'                                     incl.  Rods    {sum_e_rod}\n')
+        f.write(f'                                     incl. Beams    {sum_e_beam}\n')
+        f.write(f'                              Total Number of DOFs  {total_ndof}\n')
+        f.write(f'                              Number of SPCs        {len([ i for nid in sorted(spc.keys()) for i in range(len(spc[nid]))])}\n')
+        f.write(f'                              Number of Loads       {len([ i for nid in sorted(load.keys()) for i in range(len(load[nid]))])}\n')
+        f.write(f'                              Location COG          {cog}\n')
+        f.write(f' \n')
+        # f.write(f'#----------------------------------------------------------------------------------------#\n')
         f.write(f'\n')
-        
+
+    # check force equilibrium
+
+    # sum_FRY = 0
+    # sum_FRX = 0
+
+    # for nid in sorted(nodes.keys()):
+    #     dofs = global_ndof[nid]
+    #     for dof in dofs:
+    #         if np.mod(dof,2) == 0:
+    #             # Sum of reaction forces in Y
+    #             sum_FRY += f_r[dof-1].item(0)
+    #         else:
+    #             # Sum of reaction forces in X
+    #             sum_FRX += f_r[dof-1].item(0)
+
+    # with open('./results/'+'res_'+output_name,'a') as f:
+    #     f.write(f'                      F o r c e   E q u i l i b r i u m   C h e c k\n')
+    #     f.write(f'\n') 
+    #     f.write(f'Sum of Forces in X :  {"%.4e" % sum_FRX}\n') 
+    #     f.write(f'Sum of Forces in Y :  {"%.4e" % sum_FRY}\n')    
+    #     f.write(f'\n')
+
     # nodal results
+
     # displacemnt
+    
     with open('./results/'+'res_'+output_name,'a') as f:
-        f.write(f'# Displacement ( nid, Ux, Uy, URz )\n')
+        f.write(f' \n')
+        f.write(f'                          N o d a l    D i s p l a c e m e n t s\n\n')
+        f.write(f"{'nid' : <7} {'u_x' : <15} {'u_y' : <15} {'u_R' : <15}\n")
         for nid in sorted(nodes.keys()):
             dofs = global_ndof[nid]
-            f.write(f'{nid}, ')
+            f.write(f'{nid : <2}')
             for dof in dofs:
-                f.write(f'{"%.4e" % u[dof-1].item(0)}, ')
+                f.write(f' {"%.4e" % u[dof-1].item(0) : >15}')
             f.write(f'\n')
         f.write(f'\n')
             
     # reaction forces
+    
     with open('./results/'+'res_'+output_name,'a') as f:
-        f.write(f'# Reaction forces ( nid, RFx, RFy, RMz )\n')
+        f.write(f' \n')
+        f.write(f'                        N o d a l   R e a c t i o n   F o r c e s\n\n')
+        f.write(f"{'nid' : <7} {'RF_x' : <15} {'RF_y' : <15} {'RM' : <15}\n")
         for nid in sorted(nodes.keys()):
             dofs = global_ndof[nid]
-            f.write(f'{nid}, ')
+            f.write(f'{nid : <2}')
             for dof in dofs:
-                f.write(f'{"%.4e" % f_r[dof-1].item(0)}, ')
+                f.write(f'{"%.4e" % f_r[dof-1].item(0) : >16}')
             f.write(f'\n')
         f.write(f'\n')
 
     # elemental results
-    # strain
-    with open('./results/'+'res_'+output_name,'a') as f:
-        f.write(f'# Element strains ( eid, strain at point 1, strain at point 2 )\n')
+    
+    # strains
+
+        f.write(f' \n')
+        f.write(f'                            E l e m e n t a l   S t r a i n s\n\n')
+        f.write(f"{'eid' : <7} {'Pt. 1' : <15} {'Pt. 2' : <15}\n")
         for eid in sorted(elements.keys()):
-            f.write(f'{eid}, {"%.4e" % epsilon[eid-1].item(0)}, {"%.4e" % epsilon[eid-1].item(1)}\n')
+            f.write(f'{eid :<2}{"%.4e" % epsilon[eid-1].item(0):>16}{"%.4e" % epsilon[eid-1].item(1):>16}\n')
         f.write(f'\n')
     
-    # strain
+    # stesses
+    
     with open('./results/'+'res_'+output_name,'a') as f:
-        f.write(f'# Element stresses ( eid, strain at point 1, strain at point 2 )\n')
+        f.write(f' \n')
+        f.write(f'                           E l e m e n t a l   S t r e s s e s\n\n')
+        f.write(f"{'eid' : <7} {'Pt. 1' : <15} {'Pt. 2' : <15}\n")
         for eid in sorted(elements.keys()):
-            f.write(f'{eid}, {"%.4e" % sigma[eid-1].item(0)}, {"%.4e" % sigma[eid-1].item(1)}\n')
+            f.write(f'{eid:<2}{"%.4e" % sigma[eid-1].item(0):>16}{"%.4e" % sigma[eid-1].item(1):>16}\n')
+
+    with open('./results/'+'res_'+output_name,'a') as f:
+        f.write(f' \n\n')
+        f.write(f'                               E n d   o f   R e s u l t s ')
 
     print(f'      Results written to ./results/res_{output_name}')
 
@@ -510,6 +586,6 @@ if __name__ == '__main__':
     
     #print(f'[INF] Write FE results to file')
     
-    write_results(u, f_r, epsilon, sigma, global_ndof, total_ndof, nodes, elements, filename)
+    write_results(u, f_r, epsilon, sigma, global_ndof, total_ndof, nodes, elements, spc, load, propRod, propBeam, filename)
     
 print(f'\nDone.')
