@@ -8,6 +8,8 @@ Four main python scripts have been developped at the moment:
 - `view_input_file.py`
 - `run_linear_static.py`
 
+<br />
+
 # Input File Strucutre
 
 All input files have to be created manually and must be stored in the 
@@ -125,6 +127,8 @@ Enforced displacements are also defined within the constraints definition. If a 
 3, 1, 1, -1. 
 ```
 
+<br />
+
 # Visualize the Input File
 
 To visualize the finite element model defined by the input file the `run_view.sh` bash script can be used.
@@ -160,7 +164,13 @@ To execute the bash script run in terminal the following command
 
 and it will automatically run the `view_input_file.py` script. The output `*_FE_Model.png` file will be stored in `./input_files`.
 
+<br />
+
+Example output result of the input file visualization:
+
 ![Alt text](/test/input_files/truss_structure_w_six_members_FE_Model.png "truss_structure_w_six_members")
+
+<br />
 
 # Solve the FE Model
 
@@ -207,7 +217,12 @@ and they will be stored in
 ./results
 ```
 
-The terminal outputs will be stored in a `*.log` file, and can be used for example debugging purposes.
+The terminal outputs will be stored in a `*.log` file, and can be used for example for debugging purposes.
+
+<br />
+
+
+Example output log file result:
 
 ```
 [INF] Run Linear Static Solver
@@ -243,6 +258,10 @@ Done.
 ```
 
 In the results file the solved nodal displacements and reaction forces and elemental strains and stresss results will be printed out.
+
+<br />
+
+Example output of the result file:
 
 ```
  
@@ -314,6 +333,8 @@ eid     Pt. 1           Pt. 2
                                E n d   o f   R e s u l t s 
 ```
 
+<br />
+
 # Summary and Outlook
 
 The FE results provided by the python code have been tested and verified for now for planar truss strucutres (see files in `./test` directory). The FE models for the truss and beam strucutres and their results for verification are taken from [[2]](#2).
@@ -321,6 +342,8 @@ The FE results provided by the python code have been tested and verified for now
 Beam and Truss/Beam structures will be tested.
 
 At the moment, only the input file model is visualized by using the `view_input_file.py` script. For future crosschecks of the strucutre behaviour, the deformed shape of the structure will also be available to plot. 
+
+<br />
 
 # References
 [[1]](#1) Finite Element Method Lecture Notes, Frankfurt University of Applied Sciences
