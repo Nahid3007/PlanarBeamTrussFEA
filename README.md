@@ -1,6 +1,6 @@
 # Overview
 
-Simple python scripts to calculate one dimensional planar truss and beam structures based on the finite element approach .
+Simple python scripts to calculate one dimensional planar truss and beam structures based on the finite element approach [[1]](#1).
 
 Four main python scripts have been developped at the moment:
 - `finite_element_classes.py`
@@ -316,6 +316,13 @@ eid     Pt. 1           Pt. 2
 
 # Summary and Outlook
 
-The python FE results have been tested at the moment for truss sturcutres taken from REF. 
+The FE results provided by the python code have been tested and verified for now for planar truss strucutres (see files in `./test` directory). The FE models for the truss and beam strucutres and their results for verification are taken from [[2]](#2).
+
+Beam and Truss/Beam structures will be tested.
+
+At the moment, only the input file model is visualized by using the `view_input_file.py` script. For future crosschecks of the strucutre behaviour, the deformed shape of the structure will also be available to plot. 
 
 # References
+[[1]](#1) Finite Element Method Lecture Notes, Frankfurt University of Applied Scinces
+
+[[2]](#2) Öchsner, Andreas & Öchsner, Marco. (2018). A First Introduction to the Finite Element Analysis Program MSC Marc/Mentat. 10.1007/978-3-319-71915-3. 
