@@ -323,6 +323,6 @@ Beam and Truss/Beam structures will be tested.
 At the moment, only the input file model is visualized by using the `view_input_file.py` script. For future crosschecks of the strucutre behaviour, the deformed shape of the structure will also be available to plot. 
 
 # References
-[[1]](#1) Finite Element Method Lecture Notes, Frankfurt University of Applied Scinces
+[[1]](#1) Finite Element Method Lecture Notes, Frankfurt University of Applied Sciences
 
 [[2]](#2) Öchsner, Andreas & Öchsner, Marco. (2018). A First Introduction to the Finite Element Analysis Program MSC Marc/Mentat. 10.1007/978-3-319-71915-3. 
