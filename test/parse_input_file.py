@@ -14,6 +14,10 @@ def parseInputFile(inputFile):
     bNode, bElemRod, bElemBeam, bProd, bLoad, bSpc = False, False, False, False, False, False
 
     for line in lines:
+
+        # Skipt comment lines
+        if line.startswith('#'):
+            continue
         
         line = line.strip().lower()
         
