@@ -2,11 +2,12 @@
 
 Simple python scripts to calculate one dimensional planar truss and beam structures based on the finite element approach [[1]](#1).
 
-Four main python scripts have been developped at the moment:
-- `finite_element_classes.py`
-- `parse_input_file.py`
-- `view_input_file.py`
-- `run_linear_static.py`
+Five main python scripts have been developped at the moment:
+- `fem_classes.py`
+- `fem_functions`
+- `parse_input_file_linear_static.py`
+- `visualize_input_file.py`
+- `main_sol_linear_static.py`
 
 <br />
 
@@ -133,42 +134,46 @@ Enforced displacements are also defined within the constraints definition. If a 
 
 To visualize the finite element model defined by the input file the `run_view.sh` bash script can be used.
 
-The bash script looks as followed:
+The bash script - as an example - looks as followed:
 
 ```
 # bash script to execute FEA python files   
 
-# ENTER input file name (without file ending)
+# ENTER file path and input filename (without file ending)
 
-input_file_name=(
-"dummy_input_file_1"
-# "dummy_input_file_2"
+input_path='./input_files/rod_truss_test/'
+
+filename=(
+"rod_fixed_displacement"
+# "rod_fixed_point_load"
 )
 
 # run preview input file
 
-for infile in "${input_file_name[@]}"; do
-    python view_input_file.py $infile.txt
+for file in "${filename[@]}"; do
+    python visualize_input_file.py $input_path$file.txt
 done
 
-echo 'Done bash run.'   
+echo 'Done bash run.' 
 ```
 
-Enter the input file name in the `input_file_name` array. Multiple input file can be specified by entering the file name row by row. If input file should not be used at the moment it can be commented out using the `#` sign before the input file name.
+As mentioned all input files have to be stores in the `./input_files` directory. When input files are stored in subfolder as for example in `rod_truss_test` in the example bash file, this folder has to be explictly specified in the `input_path` variable.
 
-To execute the bash script run in terminal the following command
+The `filename` array contains all input filenames without the file ending. Multiple filename can be specified by entering it row by row (*do not forget the quotations*). If the a row starts with a hash (`#`) sign this line will be igored.
+
+To execute the bash script, run in the terminal the following command
 
 ```
 ./run_view.sh
 ```
 
-and it will automatically run the `view_input_file.py` script. The output `*_FE_Model.png` file will be stored in `./input_files`.
+and it will automatically run the `view_input_file.py` script. The output `*_FE_Model.png` file will be stored in the specified input file directory.
 
 <br />
 
 Example output result of the input file visualization:
 
-![Alt text](/test/input_files/truss_structure_w_six_members_FE_Model.png "truss_structure_w_six_members")
+![Alt text](/test/input_files/rod_truss_test/truss_structure_w_six_members_FE_Model.png "truss_structure_w_six_members")
 
 <br />
 
@@ -176,31 +181,32 @@ Example output result of the input file visualization:
 
 To solve the FE model input file the `run_solve.sh` bash script can be used.
 
-The bash script looks as followed:
+The bash script - as an example - looks as followed:
 
 ```
 # bash script to execute FEA python files   
 
-# input file name (without file ending)
+# ENTER file path and input filename (without file ending)
 
-input_file_name=(
-"dummy_input_file_1"
-# "dummy_input_file_2"
+input_path='./input_files/rod_truss_test/'
+
+filename=(
+"rod_fixed_displacement"
+# "rod_fixed_point_load"
 )
-
 
 # run python 1D FE solver
 
-for infile in "${input_file_name[@]}"; do
-    python run_linear_static.py $infile.txt | tee ./results/$infile.log
+for file in "${filename[@]}"; do
+    python main_sol_linear_static.py $input_path$file.txt | tee ./results/$file.log
 done
 
-echo 'Done bash run.'  
+echo 'Done bash run.'    
 ```
 
-Enter the input file name in the `input_file_name` array. Multiple input file can be specified by entering the file name row by row. If input file should not be used at the moment it can be commented out using the `#` sign before the input file name.
+The bash script inputs are similar to `run_view.sh` and is described above.
 
-To execute the bash script run in terminal the following command
+To execute the bash script, run in the terminal the following command
 
 ```
 ./run_solve.sh

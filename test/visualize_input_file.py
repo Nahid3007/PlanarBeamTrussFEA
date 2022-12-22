@@ -1,4 +1,4 @@
-from parse_input_file import *
+from parse_input_file_linear_static import parseInputFileLinearStatic
 
 import sys
 import numpy as np
@@ -8,16 +8,16 @@ import matplotlib.patches as patches
 
 if __name__ == '__main__':
 
-    filename = sys.argv[1]
+    filename_path = sys.argv[1]
     
     print(f'[INF] Visualize FE input model')
     
     # P A R S E  I N P U T  F I L E
     
-    print(f'[INF] Parsing input file {filename}')
+    print(f'[INF] Parsing input file {filename_path}')
     
     try:
-        nodes, elements, propRod, propBeam, load, spc = parseInputFile('./input_files/'+filename)
+        nodes, elements, propRod, propBeam, load, spc = parseInputFileLinearStatic(filename_path)
     except FileNotFoundError:
         print(f'[ERR] Input file not found. Please check')
         print(f'      Exit script')
@@ -177,13 +177,11 @@ if __name__ == '__main__':
                     # plt.annotate(str(load[nid][i].value), (nodes[int(nid)].x,nodes[int(nid)].y), textcoords='offset points', xytext=(-15,5), ha='right', fontsize = 12, color='g')
             
     # Output
+
+    fig_out = filename_path.replace('.txt','')+'_FE_Model.png'
     
-    fig_fem_model_input = filename.replace('.txt','')+'_FE_Model.png'
+    plt.savefig(fig_out, dpi = 200)
     
-    output_path = './input_files/'+fig_fem_model_input
-    
-    plt.savefig(output_path, dpi = 200)
-    
-    print(f'[INF] FE model exported to {output_path}')
+    print(f'[INF] FE model exported to {fig_out}')
     
 print(f'\nDone.\n')

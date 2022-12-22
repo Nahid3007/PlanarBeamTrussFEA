@@ -1,3 +1,4 @@
+# Model taken from Ref. [2], pg. 12, 13 (see README)
 *node
 1,0.,0.
 2,1.,0.

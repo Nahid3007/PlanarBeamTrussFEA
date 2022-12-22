@@ -1,5 +1,5 @@
  
-GUID : 8c3732a8-d814-415d-97ab-68f3e20292d0
+GUID : b163be19-b2e1-4dbf-b307-9f06c7e5df14
  
                                       R e s u l t s                                       
  
@@ -33,8 +33,8 @@ nid     u_x             u_y             u_R
                         N o d a l   R e a c t i o n   F o r c e s
 
 nid     RF_x            RF_y            RM             
-1      -5.2042e-18     -3.8490e-02
-2       3.3333e-02      0.0000e+00
+1      -1.0408e-17     -3.8490e-02
+2       3.3333e-02      3.4694e-18
 3      -3.3333e-02      3.8490e-02
 
  

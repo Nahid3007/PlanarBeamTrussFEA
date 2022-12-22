@@ -1,12 +1,12 @@
-from finite_element_classes import *
+from fem_classes import *
 
 #------------------------------------------------------------------------------------------------#
 #                                       P A R S E  I N P U T  F I L E                            #
 #------------------------------------------------------------------------------------------------#
 
-def parseInputFile(inputFile):
+def parseInputFileLinearStatic(inputFilePath):
 
-    with open(inputFile) as f_in:
+    with open(inputFilePath) as f_in:
         lines = f_in.readlines()
 
     elements, nodes, propRod, propBeam, load, spc = {}, {}, {}, {}, {}, {}
@@ -15,7 +15,7 @@ def parseInputFile(inputFile):
 
     for line in lines:
 
-        # Skipt comment lines
+        # Skip comment lines
         if line.startswith('#'):
             continue
         
