@@ -1,13 +1,15 @@
-# Model taken from Ref. [2], pg. 43 (see README)
-# Load case 2 : Moment of -160 around plane normal
+# Model taken from Ref. [2], pg. 50 (see README)
 *node
 1,0.,0.
-2,10.,0.
+2,6.,0.
 *element, type=beam
 1,1,2
 *property beam
 1,1,200000.,0.25,5.20833333e-3,0.25
 *load
-2,3,-160
+1,2,-4.6
+1,3,-6
+2,2,-10.5
+2,3,9
 *boundary
 1,1,3,0.

@@ -1,3 +1,5 @@
+# Model taken from Ref. [2], pg. 43 (see README)
+# Load case 2 : Enforced displacement of -16 in Y
 *node
 1,0.,0.
 2,10.,0.
