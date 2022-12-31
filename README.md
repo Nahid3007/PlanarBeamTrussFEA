@@ -4,7 +4,7 @@ Simple python scripts to calculate one dimensional planar truss and beam structu
 
 Five main python scripts have been developped at the moment:
 - `fem_classes.py`
-- `fem_functions`
+- `fem_functions.py`
 - `parse_input_file_linear_static.py`
 - `visualize_input_file.py`
 - `main_sol_linear_static.py`
