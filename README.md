@@ -11,6 +11,8 @@ Five main python scripts have been developped at the moment:
 
 <br />
 
+**All scripts will be currently updated in `./test` until all test cases are passed.**
+
 # Input File Strucutre
 
 All input files have to be created manually and must be stored in the 
