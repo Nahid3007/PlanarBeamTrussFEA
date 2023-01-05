@@ -12,6 +12,7 @@ from fem_functions import (
 
 import sys
 import numpy as np
+import xlsxwriter
 
 if __name__ == '__main__': 
         
@@ -73,7 +74,6 @@ if __name__ == '__main__':
     
     print(f'      Global stiffness matrix size: {K.shape}')
     
-    
     # S E T U P  A N D  S O L V E  S Y S T E M  O F  E Q U A T I O N
     
     print(f'[INF] Solve linear system of equations K * u = f')
@@ -103,4 +103,44 @@ if __name__ == '__main__':
     
     write_results(u, f_r, epsilon, sigma, global_ndof, total_ndof, nodes, elements, spc, load, propRod, propBeam, filename_path)
     
+    # D E B U G  R E S U L T S
+
+    print(f'[DBG] Write to Excel output file')
+    
+    workbook = xlsxwriter.Workbook('output.xlsx')
+    
+    worksheet_1 = workbook.add_worksheet('StiffnessMatrix')
+    
+    for i in range(K.shape[0]):
+        for j in range(K.shape[1]):
+            worksheet_1.write(i,j,K[i,j])
+
+    worksheet_2 = workbook.add_worksheet('Force')
+    
+    for i in range(f.shape[0]):
+        worksheet_2.write(i,0,f[i])
+
+    worksheet_3 = workbook.add_worksheet('Displacement')
+    
+    for i in range(u.shape[0]):
+        worksheet_3.write(i,0,u[i])
+        
+    worksheet_4 = workbook.add_worksheet('K_freedofs')
+
+    for i in range(K_freedofs.shape[0]):
+        for j in range(K_freedofs.shape[1]):
+            worksheet_4.write(i,j,K_freedofs[i,j])
+
+    worksheet_5 = workbook.add_worksheet('fbb')
+    
+    for i in range(f_bb.shape[0]):
+        worksheet_5.write(i,0,f_bb[i])
+
+    worksheet_6 = workbook.add_worksheet('Reaction_Forces')
+    
+    for i in range(f_r.shape[0]):
+        worksheet_6.write(i,0,f_r[i])
+    
+    workbook.close()
+
 print(f'\nDone.')
