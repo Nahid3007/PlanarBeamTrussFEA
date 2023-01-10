@@ -111,12 +111,12 @@ class Element:
             I = propBeam[eid].I
             l = elements[eid].length(nodes)
              
-            ke_l = np.matrix([ [ A,           0,       0, -A,            0,        0],
-                               [ 0, 12*(I/l**2), 6*(I/l),  0, -12*(I/l**2),  6*(I/l)],
-                               [ 0,     6*(I/l),     4*I,  0,     -6*(I/l),      2*I],
-                               [-A,           0,       0,  A,            0,        0],
-                               [ 0,-12*(I/l**2), 6*(I/l),  0,  12*(I/l**2), -6*(I/l)],
-                               [ 0,    -6*(I/l),     2*I,  0,     -6*(I/l),      4*I] ])
+            ke_l = np.matrix([ [ A,           0,        0, -A,            0,        0],
+                               [ 0, 12*(I/l**2),  6*(I/l),  0, -12*(I/l**2),  6*(I/l)],
+                               [ 0,     6*(I/l),      4*I,  0,     -6*(I/l),      2*I],
+                               [-A,           0,        0,  A,            0,        0],
+                               [ 0,-12*(I/l**2), -6*(I/l),  0,  12*(I/l**2), -6*(I/l)],
+                               [ 0,     6*(I/l),      2*I,  0,     -6*(I/l),      4*I] ])
             
             s = np.sin(elements[eid].rotationAngle(nodes))
             c = np.cos(elements[eid].rotationAngle(nodes))
