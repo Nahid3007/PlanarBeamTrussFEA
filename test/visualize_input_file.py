@@ -9,6 +9,7 @@ import matplotlib.patches as patches
 if __name__ == '__main__':
 
     filename_path = sys.argv[1]
+    output_path = sys.argv[2]
     
     print(f'[INF] Visualize FE input model')
     
@@ -178,10 +179,11 @@ if __name__ == '__main__':
             
     # Output
 
-    fig_out = filename_path.replace('.txt','')+'_FE_Model.png'
+    filename = filename_path.split('/')[3]
+    fig_out = filename.replace('.txt','')+'_FE_Model.png'
     
-    plt.savefig(fig_out, dpi = 200)
+    plt.savefig(output_path+fig_out, dpi = 200)
     
-    print(f'[INF] FE model exported to {fig_out}')
+    print(f'[INF] FE model exported to {output_path}')
     
 print(f'\nDone.\n')

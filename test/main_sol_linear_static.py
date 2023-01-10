@@ -17,6 +17,7 @@ import xlsxwriter
 if __name__ == '__main__': 
         
     filename_path = sys.argv[1]
+    output_path = sys.argv[2]
 
     # P A R S E  I N P U T  F I L E
     
@@ -35,14 +36,14 @@ if __name__ == '__main__':
     print(f'      Number of SPCs: {len([ i for nid in sorted(spc.keys()) for i in range(len(spc[nid]))])}')
     print(f'      Number of loads: {len([ i for nid in sorted(load.keys()) for i in range(len(load[nid]))])}')
 
-    print(f'[INF] Element properties (eid, n1, n2, l, alpha, E, A, I)')
+    print(f'[INF] Element properties (Element type, eid, n1, n2, length, rotation angle, E, A, I)')
     
     for eid in sorted(elements.keys()):
         rotAngle = elements[eid].rotationAngle(nodes)*(180/(np.pi))
         if elements[eid].elem_type == 'rod':
-            print(f'      {eid}, {elements[eid].n1}, {elements[eid].n2}, {"%.2f"%elements[eid].length(nodes)}, {"%.2f"%rotAngle}, {propRod[eid].E}, {propRod[eid].A}')
+            print(f'      Rod, {eid}, {elements[eid].n1}, {elements[eid].n2}, {"%.2f"%elements[eid].length(nodes)}, {"%.2f"%rotAngle}, {propRod[eid].E}, {propRod[eid].A}')
         elif elements[eid].elem_type == 'beam':
-            print(f'      {eid}, {elements[eid].n1}, {elements[eid].n2}, {"%.2f"%elements[eid].length(nodes)}, {"%.2f"%rotAngle}, {propBeam[eid].E}, {propBeam[eid].A}, {propBeam[eid].I}')
+            print(f'      Beam, {eid}, {elements[eid].n1}, {elements[eid].n2}, {"%.2f"%elements[eid].length(nodes)}, {"%.2f"%rotAngle}, {propBeam[eid].E}, {propBeam[eid].A}, {propBeam[eid].I}')
     
     print(f'[INF] SPCs (nid, first DOF, last DOF, value)')
     
@@ -101,46 +102,46 @@ if __name__ == '__main__':
     
     print(f'[INF] Write FE results to file')
     
-    write_results(u, f_r, epsilon, sigma, global_ndof, total_ndof, nodes, elements, spc, load, propRod, propBeam, filename_path)
+    write_results(u, f_r, epsilon, sigma, global_ndof, total_ndof, nodes, elements, spc, load, propRod, propBeam, filename_path, output_path)
     
     # D E B U G  R E S U L T S
 
-    print(f'[DBG] Write to Excel output file')
+    # print(f'[DBG] Write to Excel output file')
     
-    workbook = xlsxwriter.Workbook('output.xlsx')
+    # workbook = xlsxwriter.Workbook('output.xlsx')
     
-    worksheet_1 = workbook.add_worksheet('StiffnessMatrix')
+    # worksheet_1 = workbook.add_worksheet('StiffnessMatrix')
     
-    for i in range(K.shape[0]):
-        for j in range(K.shape[1]):
-            worksheet_1.write(i,j,K[i,j])
+    # for i in range(K.shape[0]):
+    #    for j in range(K.shape[1]):
+    #         worksheet_1.write(i,j,K[i,j])
 
-    worksheet_2 = workbook.add_worksheet('Force')
+    # worksheet_2 = workbook.add_worksheet('Force')
     
-    for i in range(f.shape[0]):
-        worksheet_2.write(i,0,f[i])
+    # for i in range(f.shape[0]):
+    #     worksheet_2.write(i,0,f[i])
 
-    worksheet_3 = workbook.add_worksheet('Displacement')
+    # worksheet_3 = workbook.add_worksheet('Displacement')
     
-    for i in range(u.shape[0]):
-        worksheet_3.write(i,0,u[i])
+    # for i in range(u.shape[0]):
+    #     worksheet_3.write(i,0,u[i])
         
-    worksheet_4 = workbook.add_worksheet('K_freedofs')
+    # worksheet_4 = workbook.add_worksheet('K_freedofs')
 
-    for i in range(K_freedofs.shape[0]):
-        for j in range(K_freedofs.shape[1]):
-            worksheet_4.write(i,j,K_freedofs[i,j])
+    # for i in range(K_freedofs.shape[0]):
+    #     for j in range(K_freedofs.shape[1]):
+    #        worksheet_4.write(i,j,K_freedofs[i,j])
 
-    worksheet_5 = workbook.add_worksheet('fbb')
+    # worksheet_5 = workbook.add_worksheet('fbb')
     
-    for i in range(f_bb.shape[0]):
-        worksheet_5.write(i,0,f_bb[i])
+    # for i in range(f_bb.shape[0]):
+    #     worksheet_5.write(i,0,f_bb[i])
 
-    worksheet_6 = workbook.add_worksheet('Reaction_Forces')
+    # worksheet_6 = workbook.add_worksheet('Reaction_Forces')
     
-    for i in range(f_r.shape[0]):
-        worksheet_6.write(i,0,f_r[i])
+    # for i in range(f_r.shape[0]):
+    #     worksheet_6.write(i,0,f_r[i])
     
-    workbook.close()
+    # workbook.close()
 
 print(f'\nDone.')

@@ -1,51 +1,51 @@
  
-GUID : 7a8ddb87-e4fa-40a6-b35a-7393d74a56b2
+GUID : 0515c6af-8c96-4841-939f-adef4c6a23cc
  
                                       R e s u l t s                                       
  
               Linear Static Analysis for Planar Truss and Beam Structures
  
  
- Input file: beam_w_distributed_load.txt
+ Input file: rod_fixed_displacement.txt
  
  
                         S u m m a r y   F E   M o d e l   S i z e
  
                               Number of Nodes       2
                               Number of Elements    1
-                                     incl.  Rods    0
-                                     incl. Beams    1
-                              Total Number of DOFs  6
-                              Number of SPCs        1
-                              Number of Loads       4
-                              Location COG          (3.0, 0.0)
+                                     incl.  Rods    1
+                                     incl. Beams    0
+                              Total Number of DOFs  4
+                              Number of SPCs        3
+                              Number of Loads       0
+                              Location COG          (0.5, 0.0)
  
 
  
                           N o d a l    D i s p l a c e m e n t s
 
 nid     u_x             u_y             u_R            
-1       0.0000e+00      0.0000e+00      0.0000e+00
-2       0.0000e+00     -5.7024e-01     -1.2960e-01
+1       0.0000e+00      0.0000e+00
+2       5.0000e-01      0.0000e+00
 
  
                         N o d a l   R e a c t i o n   F o r c e s
 
 nid     RF_x            RF_y            RM             
-1       0.0000e+00      1.0500e+01      5.4000e+01
-2       0.0000e+00     -1.0500e+01      9.0000e+00
+1      -5.0000e+00      0.0000e+00
+2       5.0000e+00      0.0000e+00
 
  
                             E l e m e n t a l   S t r a i n s
 
 eid     Pt. 1           Pt. 2          
-1      -5.4000e-03      5.4000e-03
+1       5.0000e-01      5.0000e-01
 
  
                            E l e m e n t a l   S t r e s s e s
 
 eid     Pt. 1           Pt. 2          
-1      -1.0800e+03      1.0800e+03
+1       1.0000e+01      1.0000e+01
  
 
                                E n d   o f   R e s u l t s 

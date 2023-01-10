@@ -1,57 +1,51 @@
  
-GUID : 90023e79-c39b-453f-92a0-c62cace297fd
+GUID : 46543d71-568d-4000-b69b-5a3c12e5cb80
  
                                       R e s u l t s                                       
  
               Linear Static Analysis for Planar Truss and Beam Structures
  
  
- Input file: plane_truss_triangle_F.txt
+ Input file: beam_w_square_cross_section_LC_3.txt
  
  
                         S u m m a r y   F E   M o d e l   S i z e
  
-                              Number of Nodes       3
-                              Number of Elements    3
-                                     incl.  Rods    3
-                                     incl. Beams    0
+                              Number of Nodes       2
+                              Number of Elements    1
+                                     incl.  Rods    0
+                                     incl. Beams    1
                               Total Number of DOFs  6
                               Number of SPCs        2
-                              Number of Loads       1
-                              Location COG          (-0.2886751346, 0.5)
+                              Number of Loads       0
+                              Location COG          (5.0, 0.0)
  
 
  
                           N o d a l    D i s p l a c e m e n t s
 
 nid     u_x             u_y             u_R            
-1       1.3333e-02      0.0000e+00
-2       3.0000e-02     -5.7735e-03
-3       0.0000e+00      0.0000e+00
+1       0.0000e+00      0.0000e+00      0.0000e+00
+2       0.0000e+00     -1.6000e+01     -2.4000e+00
 
  
                         N o d a l   R e a c t i o n   F o r c e s
 
 nid     RF_x            RF_y            RM             
-1       0.0000e+00     -1.1547e-01
-2       1.0000e-01     -1.3878e-17
-3      -1.0000e-01      1.1547e-01
+1       0.0000e+00      5.0000e+01      5.0000e+02
+2       0.0000e+00     -5.0000e+01     -7.9818e-14
 
  
                             E l e m e n t a l   S t r a i n s
 
 eid     Pt. 1           Pt. 2          
-1       1.1547e-02      1.1547e-02
-2      -5.7735e-03     -5.7735e-03
-3       1.1547e-02      1.1547e-02
+1      -6.0000e-02      6.0000e-02
 
  
                            E l e m e n t a l   S t r e s s e s
 
 eid     Pt. 1           Pt. 2          
-1       2.3094e-01      2.3094e-01
-2      -1.1547e-01     -1.1547e-01
-3       2.3094e-01      2.3094e-01
+1      -1.2000e+04      1.2000e+04
  
 
                                E n d   o f   R e s u l t s 

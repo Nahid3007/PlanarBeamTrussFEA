@@ -1,0 +1,57 @@
+ 
+GUID : a8b77fae-9d4f-4bd6-acd3-7ad4590188f8
+ 
+                                      R e s u l t s                                       
+ 
+              Linear Static Analysis for Planar Truss and Beam Structures
+ 
+ 
+ Input file: plane_truss_triangle_F.txt
+ 
+ 
+                        S u m m a r y   F E   M o d e l   S i z e
+ 
+                              Number of Nodes       3
+                              Number of Elements    3
+                                     incl.  Rods    3
+                                     incl. Beams    0
+                              Total Number of DOFs  6
+                              Number of SPCs        2
+                              Number of Loads       1
+                              Location COG          (-0.2886751346, 0.5)
+ 
+
+ 
+                          N o d a l    D i s p l a c e m e n t s
+
+nid     u_x             u_y             u_R            
+1       0.0000e+00      0.0000e+00
+2       1.6667e-02     -5.7735e-03
+3      -1.4141e-18      0.0000e+00
+
+ 
+                        N o d a l   R e a c t i o n   F o r c e s
+
+nid     RF_x            RF_y            RM             
+1      -1.0000e-01     -5.7735e-02
+2       1.0000e-01     -1.3878e-17
+3      -1.2939e-33      5.7735e-02
+
+ 
+                            E l e m e n t a l   S t r a i n s
+
+eid     Pt. 1           Pt. 2          
+1       1.1547e-02      1.1547e-02
+2      -5.7735e-03     -5.7735e-03
+3       1.2246e-18      1.2246e-18
+
+ 
+                           E l e m e n t a l   S t r e s s e s
+
+eid     Pt. 1           Pt. 2          
+1       2.3094e-01      2.3094e-01
+2      -1.1547e-01     -1.1547e-01
+3       2.4493e-17      2.4493e-17
+ 
+
+                               E n d   o f   R e s u l t s 

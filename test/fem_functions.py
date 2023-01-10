@@ -360,11 +360,11 @@ def postprocess_structural_results(f, u, u_freedofs, freedofs, global_edof, K, n
 #                                              W R I T E  R E S U L T S                                            #
 #------------------------------------------------------------------------------------------------------------------#
 
-def write_results(u, f_r, epsilon, sigma, global_ndof, total_ndof, nodes, elements, spc, load, propRod, propBeam, filename_path):
+def write_results(u, f_r, epsilon, sigma, global_ndof, total_ndof, nodes, elements, spc, load, propRod, propBeam, filename_path, output_path):
 
     filename = filename_path.split('/')[-1]
 
-    output_path = './results/'+'res_'+filename
+    # output_path = './results/'+'res_'+filename
 
     # compute center of gravity
 
@@ -388,7 +388,7 @@ def write_results(u, f_r, epsilon, sigma, global_ndof, total_ndof, nodes, elemen
         elif elements[eid].elem_type == 'beam':
             sum_e_beam += 1
     
-    with open(output_path,'w') as f:
+    with open(output_path+filename,'w') as f:
         # f.write(f'#----------------------------------------------------------------------------------------#\n')
         f.write(f' \n')
         f.write(f'GUID : {uuid.uuid4()}\n')
@@ -441,7 +441,7 @@ def write_results(u, f_r, epsilon, sigma, global_ndof, total_ndof, nodes, elemen
 
     # displacemnt
     
-    with open(output_path,'a') as f:
+    with open(output_path+filename,'a') as f:
         f.write(f' \n')
         f.write(f'                          N o d a l    D i s p l a c e m e n t s\n\n')
         f.write(f"{'nid' : <7} {'u_x' : <15} {'u_y' : <15} {'u_R' : <15}\n")
@@ -455,7 +455,7 @@ def write_results(u, f_r, epsilon, sigma, global_ndof, total_ndof, nodes, elemen
             
     # reaction forces
     
-    with open(output_path,'a') as f:
+    with open(output_path+filename,'a') as f:
         f.write(f' \n')
         f.write(f'                        N o d a l   R e a c t i o n   F o r c e s\n\n')
         f.write(f"{'nid' : <7} {'RF_x' : <15} {'RF_y' : <15} {'RM' : <15}\n")
@@ -471,7 +471,7 @@ def write_results(u, f_r, epsilon, sigma, global_ndof, total_ndof, nodes, elemen
     
     # strains
 
-    with open(output_path,'a') as f:
+    with open(output_path+filename,'a') as f:
         f.write(f' \n')
         f.write(f'                            E l e m e n t a l   S t r a i n s\n\n')
         f.write(f"{'eid' : <7} {'Pt. 1' : <15} {'Pt. 2' : <15}\n")
@@ -481,7 +481,7 @@ def write_results(u, f_r, epsilon, sigma, global_ndof, total_ndof, nodes, elemen
     
     # stesses
     
-    with open(output_path,'a') as f:
+    with open(output_path+filename,'a') as f:
         f.write(f' \n')
         f.write(f'                           E l e m e n t a l   S t r e s s e s\n\n')
         f.write(f"{'eid' : <7} {'Pt. 1' : <15} {'Pt. 2' : <15}\n")
@@ -490,7 +490,7 @@ def write_results(u, f_r, epsilon, sigma, global_ndof, total_ndof, nodes, elemen
 
     # end of results print
 
-    with open(output_path,'a') as f:
+    with open(output_path+filename,'a') as f:
         f.write(f' \n\n')
         f.write(f'                               E n d   o f   R e s u l t s ')
 
