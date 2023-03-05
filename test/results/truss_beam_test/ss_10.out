@@ -1,0 +1,56 @@
+ 
+                                      R e s u l t s                                       
+ 
+              Linear Static Analysis for Planar Truss and Beam Structures
+ 
+ 
+ Input file: ss_10.out
+ 
+ 
+                        S u m m a r y   F E   M o d e l   S i z e
+ 
+                              Number of Nodes       4
+                              Number of Elements    3
+                                     incl.  Rods    2
+                                     incl. Beams    1
+                              Total Number of DOFs  10
+                              Number of SPCs        4
+                              Number of Loads       0
+ 
+
+ 
+                          N o d a l    D i s p l a c e m e n t s
+
+nid     u_x             u_y             u_R            
+1       0.0000e+00      0.0000e+00     -3.4641e-03
+2       2.5981e+00      1.0000e+00     -3.4641e-03
+3       0.0000e+00      0.0000e+00
+4       0.0000e+00      1.0000e+01
+
+ 
+                        N o d a l   R e a c t i o n   F o r c e s
+
+nid     RF_x            RF_y            RM             
+1      -1.6485e-11     -2.7000e+05      0.0000e+00
+2       8.7311e-11      2.9104e-11     -2.9104e-11
+3      -4.6765e+05      5.7271e-11
+4       4.6765e+05      2.7000e+05
+
+ 
+                            E l e m e n t a l   S t r a i n s
+
+eid     Pt. 1           Pt. 2          
+1       1.3333e-03      1.3333e-03
+2       5.1962e-03      5.1962e-03
+3       4.5000e-03      4.5000e-03
+
+ 
+                           E l e m e n t a l   S t r e s s e s
+
+eid     Pt. 1           Pt. 2          
+1       2.6667e+02      2.6667e+02
+2       1.0392e+03      1.0392e+03
+3       9.0000e+02      9.0000e+02
+ 
+
+                               E n d   o f   R e s u l t s 
