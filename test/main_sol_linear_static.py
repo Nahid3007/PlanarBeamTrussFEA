@@ -13,11 +13,26 @@ from fem_functions import (
 import sys
 import numpy as np
 import xlsxwriter
+import argparse
+
+def ParseArgs():
+    parser = argparse.ArgumentParser(description='2D PLANAR TRUSS AND BEAM FINITE ELEMENT ANALYSIS SOLVER')
+    parser.add_argument("--infile", help="Input file (with absolute/realtive path).", required=True, type=str, action='store')
+    parser.add_argument("--outpath", help="Output path of the results.", required=True, type=str, action='store')
+    # parser.add_argument("--ASCII", help="If defined ascii representation. Default: binary.", required=False, action='store_true', default=False)
+    args = parser.parse_args()
+    
+    return args
 
 if __name__ == '__main__': 
-        
-    filename_path = sys.argv[1]
-    output_path = sys.argv[2]
+
+    args = ParseArgs()
+
+    filename_path  = args.infile
+    output_path = args.outpath 
+
+    #filename_path = sys.argv[1]
+    #output_path = sys.argv[2]
 
     # P A R S E  I N P U T  F I L E
     

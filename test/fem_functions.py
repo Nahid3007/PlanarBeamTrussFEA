@@ -1,5 +1,8 @@
 import numpy as np
-import uuid
+import itertools
+import h5py
+
+# import uuid
 
 #------------------------------------------------------------------------------------------------------------------#
 #                                   L O C A L  T O  G L O B A L  D O F  M A P P I N G                              #
@@ -362,20 +365,20 @@ def postprocess_structural_results(f, u, u_freedofs, freedofs, global_edof, K, n
 
 def write_results(u, f_r, epsilon, sigma, global_ndof, total_ndof, nodes, elements, spc, load, propRod, propBeam, filename_path, output_path):
 
-    filename = filename_path.split('/')[-1]
+    # WRITE RESUTLS TO *.OUT FILE
 
-    # output_path = './results/'+'res_'+filename
+    filename = filename_path.split('/')[-1].replace('txt','out')
 
     # compute center of gravity
 
-    centroid = np.array([0.,0.])
+    # centroid = np.array([0.,0.])
     
-    for nid in sorted(nodes.keys()):
-        centroid += nodes[nid].coordinates
+    # for nid in sorted(nodes.keys()):
+    #     centroid += nodes[nid].coordinates
         
-    centroid = centroid/len(nodes)
+    # centroid = centroid/len(nodes)
 
-    cog = (centroid[0],centroid[1])
+    # cog = (centroid[0],centroid[1])
 
     # counting number of rod and beam elements
 
@@ -391,8 +394,8 @@ def write_results(u, f_r, epsilon, sigma, global_ndof, total_ndof, nodes, elemen
     with open(output_path+filename,'w') as f:
         # f.write(f'#----------------------------------------------------------------------------------------#\n')
         f.write(f' \n')
-        f.write(f'GUID : {uuid.uuid4()}\n')
-        f.write(f' \n')
+        # f.write(f'GUID : {uuid.uuid4()}\n')
+        # f.write(f' \n')
         f.write(f'                                      R e s u l t s                                       \n')
         f.write(f' \n')
         f.write(f'              Linear Static Analysis for Planar Truss and Beam Structures\n')
@@ -410,37 +413,17 @@ def write_results(u, f_r, epsilon, sigma, global_ndof, total_ndof, nodes, elemen
         f.write(f'                              Total Number of DOFs  {total_ndof}\n')
         f.write(f'                              Number of SPCs        {len([ i for nid in sorted(spc.keys()) for i in range(len(spc[nid]))])}\n')
         f.write(f'                              Number of Loads       {len([ i for nid in sorted(load.keys()) for i in range(len(load[nid]))])}\n')
-        f.write(f'                              Location COG          {cog}\n')
+        # f.write(f'                              Location COG          {cog}\n')
         f.write(f' \n')
         # f.write(f'#----------------------------------------------------------------------------------------#\n')
         f.write(f'\n')
 
-    # check force equilibrium
+    # PRINT NODAL RESULTS
 
-    # sum_FRY = 0
-    # sum_FRX = 0
-
-    # for nid in sorted(nodes.keys()):
-    #     dofs = global_ndof[nid]
-    #     for dof in dofs:
-    #         if np.mod(dof,2) == 0:
-    #             # Sum of reaction forces in Y
-    #             sum_FRY += f_r[dof-1].item(0)
-    #         else:
-    #             # Sum of reaction forces in X
-    #             sum_FRX += f_r[dof-1].item(0)
-
-    # with open('./results/'+'res_'+output_name,'a') as f:
-    #     f.write(f'                      F o r c e   E q u i l i b r i u m   C h e c k\n')
-    #     f.write(f'\n') 
-    #     f.write(f'Sum of Forces in X :  {"%.4e" % sum_FRX}\n') 
-    #     f.write(f'Sum of Forces in Y :  {"%.4e" % sum_FRY}\n')    
-    #     f.write(f'\n')
-
-    # nodal results
-
-    # displacemnt
+    # displacement
     
+    disp_arr = []
+
     with open(output_path+filename,'a') as f:
         f.write(f' \n')
         f.write(f'                          N o d a l    D i s p l a c e m e n t s\n\n')
@@ -448,12 +431,22 @@ def write_results(u, f_r, epsilon, sigma, global_ndof, total_ndof, nodes, elemen
         for nid in sorted(nodes.keys()):
             dofs = global_ndof[nid]
             f.write(f'{nid : <2}')
+            temp = [nid]
             for dof in dofs:
                 f.write(f' {"%.4e" % u[dof-1].item(0) : >15}')
+                temp.append(u[dof-1].item(0))
+
+            if len(temp) == 3:
+                temp.append(0.)
+            
+            disp_arr.append(tuple(temp))
+
             f.write(f'\n')
         f.write(f'\n')
-            
+
     # reaction forces
+
+    rf_arr = []
     
     with open(output_path+filename,'a') as f:
         f.write(f' \n')
@@ -462,14 +455,24 @@ def write_results(u, f_r, epsilon, sigma, global_ndof, total_ndof, nodes, elemen
         for nid in sorted(nodes.keys()):
             dofs = global_ndof[nid]
             f.write(f'{nid : <2}')
+            temp = [nid]
             for dof in dofs:
                 f.write(f'{"%.4e" % f_r[dof-1].item(0) : >16}')
+                temp.append(f_r[dof-1].item(0))
+
+            if len(temp) == 3:
+                temp.append(0.)
+
+            rf_arr.append((tuple(temp)))
+        
             f.write(f'\n')
         f.write(f'\n')
 
-    # elemental results
+    # PRINT ELEMENTAL RESULTS
     
     # strains
+
+    strain_arr = []
 
     with open(output_path+filename,'a') as f:
         f.write(f' \n')
@@ -477,17 +480,20 @@ def write_results(u, f_r, epsilon, sigma, global_ndof, total_ndof, nodes, elemen
         f.write(f"{'eid' : <7} {'Pt. 1' : <15} {'Pt. 2' : <15}\n")
         for eid in sorted(elements.keys()):
             f.write(f'{eid :<2}{"%.4e" % epsilon[eid-1].item(0):>16}{"%.4e" % epsilon[eid-1].item(1):>16}\n')
+            strain_arr.append((eid,epsilon[eid-1].item(0),epsilon[eid-1].item(1)))
         f.write(f'\n')
     
     # stesses
     
+    stress_arr = []
+
     with open(output_path+filename,'a') as f:
         f.write(f' \n')
         f.write(f'                           E l e m e n t a l   S t r e s s e s\n\n')
         f.write(f"{'eid' : <7} {'Pt. 1' : <15} {'Pt. 2' : <15}\n")
         for eid in sorted(elements.keys()):
             f.write(f'{eid:<2}{"%.4e" % sigma[eid-1].item(0):>16}{"%.4e" % sigma[eid-1].item(1):>16}\n')
-
+            stress_arr.append((eid,sigma[eid-1].item(0),sigma[eid-1].item(1)))
     # end of results print
 
     with open(output_path+filename,'a') as f:
@@ -495,3 +501,28 @@ def write_results(u, f_r, epsilon, sigma, global_ndof, total_ndof, nodes, elemen
         f.write(f'                               E n d   o f   R e s u l t s ')
 
     print(f'      Results written to {output_path}')
+    
+    # SAVE RESULTS TO HDF5 FILE
+
+    # define the compound dtype
+    dt_disp = np.dtype([('NODE ID', 'i4'), ('UX', 'f8'), ('UY', 'f8'), ('URZ', 'f8')])
+    dt_rf = np.dtype([('NODE ID', 'i4'), ('RFX', 'f8'), ('RFY', 'f8'), ('RMZ', 'f8')])
+    dt_strain = np.dtype([('ELEMENT ID', 'i4'), ('STRAIN POINT 1', 'f8'), ('STRAIN POINT 2', 'f8')])
+    dt_stress = np.dtype([('ELEMENT ID', 'i4'), ('STRESS POINT 1', 'f8'), ('STRESS POINT 2', 'f8')])
+
+    # convert list to numpy array
+    disp_arr = np.asarray(disp_arr,dt_disp)
+    rf_arr = np.asarray(rf_arr,dt_rf)
+    strain_arr = np.asarray(strain_arr,dt_strain)
+    stress_arr = np.asarray(stress_arr,dt_stress)
+
+    # save to file
+    filename_h5 = filename_path.split('/')[-1].replace('txt','h5')
+    
+    with h5py.File(output_path+filename_h5, 'w') as f:
+
+        # Create the dataset and write the data
+        dset_disp = f.create_dataset('DISPLACEMENT', data=disp_arr)
+        dset_rf = f.create_dataset('REACTION LOADS', data=rf_arr)
+        dset_strain = f.create_dataset('STRAIN', data=strain_arr)
+        dset_stress = f.create_dataset('STRESS', data=stress_arr)
