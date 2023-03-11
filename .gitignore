@@ -2,6 +2,7 @@
 test/results/.DS_Store
 test/.DS_Store
 test/input_files/.DS_Store
+.idea
 
 
 # Byte-compiled / optimized / DLL files

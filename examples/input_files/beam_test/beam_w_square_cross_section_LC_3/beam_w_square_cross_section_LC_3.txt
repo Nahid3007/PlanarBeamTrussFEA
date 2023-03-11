@@ -1,0 +1,12 @@
+# Model taken from Ref. [2], pg. 43 (see README)
+# Load case 2 : Enforced displacement of -16 in Y
+*node
+1,0.,0.
+2,10.,0.
+*element, type=beam
+1,1,2
+*property beam
+1,1,200000.,0.25,5.20833333e-3,0.25
+*boundary
+1,1,3,0.
+2,2,2,-16
