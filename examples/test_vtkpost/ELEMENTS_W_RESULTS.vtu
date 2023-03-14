@@ -1,0 +1,130 @@
+<?xml version="1.0"?>
+<VTKFile type="UnstructuredGrid" version="0.1" byte_order="LittleEndian">
+  <UnstructuredGrid>
+   <Piece NumberOfPoints="8" NumberOfCells="13">
+      <Points>
+        <DataArray type="Float64" Name="Points" NumberOfComponents="3" format="ascii">
+         0.0 0.0 0.0
+         4000.0 0.0 0.0
+         8000.0 0.0 0.0
+         12000.0 0.0 0.0
+         16000.0 0.0 0.0
+         12000.0 4000.0 0.0
+         8000.0 4000.0 0.0
+         4000.0 4000.0 0.0
+        </DataArray>
+      </Points>
+      <Cells>
+        <DataArray type="Int32" Name="connectivity" format="ascii">
+         0 1
+         1 2
+         2 3
+         3 4
+         4 5
+         5 3
+         5 2
+         5 6
+         6 2
+         2 7
+         7 6
+         7 1
+         7 0
+        </DataArray>
+        <DataArray type="Int32" Name="offsets" format="ascii">
+         2
+         4
+         6
+         8
+         10
+         12
+         14
+         16
+         18
+         20
+         22
+         24
+         26
+        </DataArray>
+        <DataArray type="Int32" Name="types" format="ascii">
+         3
+         3
+         3
+         3
+         3
+         3
+         3
+         3
+         3
+         3
+         3
+         3
+         3
+        </DataArray>
+      </Cells>
+      <CellData>
+        <Array type="Int32" Name="FEM_ELEMENT_ID" format="ascii">
+         1
+         2
+         3
+         4
+         5
+         6
+         7
+         8
+         9
+         10
+         11
+         12
+         13
+        </Array>
+        <Array type="String" Name="Element_Type" format="ascii">
+         114 111 100 0
+         114 111 100 0
+         114 111 100 0
+         114 111 100 0
+         114 111 100 0
+         114 111 100 0
+         114 111 100 0
+         114 111 100 0
+         114 111 100 0
+         114 111 100 0
+         114 111 100 0
+         114 111 100 0
+         114 111 100 0
+        </Array>
+      </CellData>
+      <PointData>
+        <DataArray type="Float64" Name="Displacement" NumberOfComponents="3" format="ascii">
+          0.0 0.0 0.0
+          0.05000000000000004 -0.7742640687119282 0.0
+          0.10000000000000003 -0.48284271247461835 0.0
+          0.05000000000000001 -0.1914213562373091 0.0
+          0.0 0.0 0.0
+          -0.04999999999999985 -0.1914213562373091 0.0
+          0.049999999999999996 -0.4828427124746183 0.0
+          0.14999999999999988 -0.5742640687119281 0.0
+        </DataArray>
+        <DataArray type="Float64" Name="Reaction Forces" NumberOfComponents="3" format="ascii">
+          49.99999999999995 74.99999999999993 0.
+          2.946580085592705e-15 -100.00000000000004 0.
+          2.842170943040401e-14 4.973799150320701e-14 0.
+          -7.105427357601003e-15 4.966003500029541e-15 0.
+          -49.99999999999996 24.999999999999964 0.
+          0.0 3.552713678800501e-15 0.
+          -3.4718705168429353e-15 1.0156533370413608e-14 0.
+          0.0 6.394884621840902e-14 0.
+        </DataArray>
+        <DataArray type="Float64" Name="Reaction Moments" NumberOfComponents="3" format="ascii">
+          0. 0. 0.0
+          0. 0. 0.0
+          0. 0. 0.0
+          0. 0. 0.0
+          0. 0. 0.0
+          0. 0. 0.0
+          0. 0. 0.0
+          0. 0. 0.0
+        </DataArray>
+      </PointData>
+    </Piece>
+  </UnstructuredGrid>
+</VTKFile>
