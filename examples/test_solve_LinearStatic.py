@@ -1,8 +1,8 @@
 import sys
 import argparse
 
-from pkg.parse_input_file_linear_static import *
-from pkg.fem_functions import (
+from pkgs.parse_input_file_linear_static import *
+from pkgs.fem_functions import (
     global_nodal_dofs,
     global_element_dofs,
     total_dof,
