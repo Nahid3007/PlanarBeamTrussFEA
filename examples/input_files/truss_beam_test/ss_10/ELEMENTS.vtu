@@ -1,44 +1,45 @@
 <?xml version="1.0"?>
-<VTKFile type="UnstructuredGrid" version="0.1" byte_order="LittleEndian">
+<VTKFile type="UnstructuredGrid" version="0.1" byte_order="LittleEndian" header_type="UInt32" compressor="vtkZLibDataCompressor">
   <UnstructuredGrid>
-   <Piece NumberOfPoints="4" NumberOfCells="3">
+    <Piece NumberOfPoints="4" NumberOfCells="3">
+      <PointData>
+        <DataArray type="Int32" Name="FEM_NODE_ID" format="ascii" RangeMin="1" RangeMax="4">
+          1 2 3 4
+        </DataArray>
+      </PointData>
+      <CellData>
+        <DataArray type="Int32" Name="FEM_ELEMENT_ID" format="ascii" RangeMin="1" RangeMax="3">
+          1 2 3
+        </DataArray>
+        <Array type="String" Name="FEM_ELEMENT_TYPE" format="ascii">
+          98 101 97 109 0 114 111 100 0 114 111 100 0
+        </Array>
+      </CellData>
       <Points>
-        <DataArray type="Float64" Name="Points" NumberOfComponents="3" format="ascii">
-         0.0 0.0 0.0
-         0.0 750.0 0.0
-         -500.0 750.0 0.0
-         433.0127 1000.0 0.0
+        <DataArray type="Float32" Name="Points" NumberOfComponents="3" format="ascii" RangeMin="0" RangeMax="1089.7247332706531">
+          0 0 0 0 750 0
+          -500 750 0 433.0126953125 1000 0
+          <InformationKey name="L2_NORM_RANGE" location="vtkDataArray" length="2">
+            <Value index="0">
+              0
+            </Value>
+            <Value index="1">
+              1089.7247333
+            </Value>
+          </InformationKey>
         </DataArray>
       </Points>
       <Cells>
-        <DataArray type="Int32" Name="connectivity" format="ascii">
-         0 1
-         1 2
-         1 3
+        <DataArray type="Int64" Name="connectivity" format="ascii" RangeMin="0" RangeMax="3">
+          0 1 1 2 1 3
         </DataArray>
-        <DataArray type="Int32" Name="offsets" format="ascii">
-         2
-         4
-         6
+        <DataArray type="Int64" Name="offsets" format="ascii" RangeMin="2" RangeMax="6">
+          2 4 6
         </DataArray>
-        <DataArray type="Int32" Name="types" format="ascii">
-         3
-         3
-         3
+        <DataArray type="UInt8" Name="types" format="ascii" RangeMin="3" RangeMax="3">
+          3 3 3
         </DataArray>
       </Cells>
-      <CellData>
-        <Array type="Int32" Name="FEM_ELEMENT_ID" format="ascii">
-         1
-         2
-         3
-        </Array>
-        <Array type="String" Name="Element_Type" format="ascii">
-         98 101 97 109 0
-         114 111 100 0
-         114 111 100 0
-        </Array>
-      </CellData>
     </Piece>
   </UnstructuredGrid>
 </VTKFile>

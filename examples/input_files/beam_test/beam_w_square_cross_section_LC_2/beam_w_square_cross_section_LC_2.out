@@ -29,8 +29,8 @@ nid     u_x             u_y             u_R
                         N o d a l   R e a c t i o n   F o r c e s
 
 nid     RF_x            RF_y            RM             
-1       0.0000e+00     -1.3716e-15      1.6000e+02
-2       0.0000e+00      1.3716e-15     -1.6000e+02
+1       0.0000e+00      1.5599e-15      1.6000e+02
+2       0.0000e+00     -1.5599e-15     -1.6000e+02
 
  
                             E l e m e n t a l   S t r a i n s

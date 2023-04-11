@@ -2,38 +2,42 @@
 
 # ENTER file path and input filename (without file ending)
 
-input_path='./input_files/truss_beam_test/'
+input_path_1='./input_files/truss_test/'
+input_path_2='./input_files/beam_test/'
+input_path_3='./input_files/truss_beam_test/'
 
 filename=(
 # Truss Models
-# "rod_fixed_displacement"
-# "rod_fixed_point_load"
-# "plane_truss_triangle_F"
-# "plane_truss_triangle_U"
-# "plane_bridge_structure_LC_1"
-# "plane_bridge_structure_LC_2"
-# "truss_structure_w_six_members"
+"$input_path_1 rod_fixed_displacement"
+"$input_path_1 rod_fixed_point_load"
+"$input_path_1 plane_truss_triangle_F"
+"$input_path_1 plane_truss_triangle_U"
+"$input_path_1 plane_bridge_structure_LC_1"
+"$input_path_1 plane_bridge_structure_LC_2"
+"$input_path_1 truss_structure_w_six_members"
 # Beam Models
-# "beam_w_square_cross_section_LC_1"
-# "beam_w_square_cross_section_LC_2"
-# "beam_w_square_cross_section_LC_3"
-# "beam_w_square_cross_section_LC_4"
-# "beam_w_distributed_load"
-# "portal_frame_w_distr_load"
-# "plane_bridge_structure"
+"$input_path_2 beam_w_square_cross_section_LC_1"
+"$input_path_2 beam_w_square_cross_section_LC_2"
+"$input_path_2 beam_w_square_cross_section_LC_3"
+"$input_path_2 beam_w_square_cross_section_LC_4"
+"$input_path_2 beam_w_distributed_load"
+"$input_path_2 portal_frame_w_distr_load"
+"$input_path_2 plane_bridge_structure"
 # Truss/Beam Models
-"ws_11_12"
-"ss_09"
-"ss_10"
-"ws_09_10"
+"$input_path_3 ws_11_12"
+"$input_path_3 ss_09"
+"$input_path_3 ss_10"
+"$input_path_3 ws_09_10"
 )
 
-for file in "${filename[@]}"; do
-    python test_txt2vtk.py --infile $input_path$file/$file.txt --outpath $input_path$file/
+for line in "${filename[@]}"; do
+  read -r path file <<< $line
+  # echo $path $file
+  python3 test_txt2vtk.py --infile $path$file/$file.txt --outpath $path$file/
+
+  python3 test_solve_LinearStatic.py --infile $path$file/$file.txt --outpath $path$file/
+
+  python3 test_vtkpost.py --vtuFile $path$file/ELEMENTS.vtu --resultsFile $path$file/$file.h5 --outputFile $path$file/ELEMENTS_WITH_RESULTS.vtu
 done
 
-for file in "${filename[@]}"; do
-    python test_solve_LinearStatic.py --infile $input_path$file/$file.txt --outpath $input_path$file/
-done
-
-echo 'Done bash run.'   
+echo 'Done bash run.'
