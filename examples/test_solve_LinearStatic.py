@@ -13,6 +13,7 @@ from pkgs.fem_functions import (
     write_results
 )
 
+__version__ = "1.0.0"
 
 def ParseArgs():
     parser = argparse.ArgumentParser(description='2D PLANAR TRUSS AND BEAM FINITE ELEMENT ANALYSIS SOLVER')
@@ -32,7 +33,7 @@ if __name__ == '__main__':
 
     # P A R S E  I N P U T  F I L E
     
-    print(f'[INF] Run Linear Static Solver')
+    print(f'[INF] Run Linear Static Solver (Version {__version__})')
     print(f'[INF] Parsing input file: {filename_path}')
     
     try:

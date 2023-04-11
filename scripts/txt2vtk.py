@@ -3,6 +3,7 @@ from dataclasses import dataclass
 import numpy as np
 import argparse
 
+__version__ = '1.0.0'
 
 @dataclass()
 class Node:
@@ -237,6 +238,8 @@ if __name__ == '__main__':
 
     input_file = args.infile
     output_path = args.outpath
+
+    print(f'txt2vtk - CONVERTS THE FEM INPUT TEXT FILE TO A VTK MODEL (Version {__version__})')
 
     nodes, elements, spc, load, vtkNodes, vtkElements = parse_input_file(input_file)
 

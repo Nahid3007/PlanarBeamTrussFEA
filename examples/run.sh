@@ -32,7 +32,7 @@ filename=(
 
 for line in "${filename[@]}"; do
   read -r path file <<< $line
-  # echo $path $file
+
   python3 test_txt2vtk.py --infile $path$file/$file.txt --outpath $path$file/
 
   python3 test_solve_LinearStatic.py --infile $path$file/$file.txt --outpath $path$file/
